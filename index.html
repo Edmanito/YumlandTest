@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaiseki Shunei | Accueil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-accueil">
+
+    <div id="side-menu" class="side-panel">
+        <div class="menu-content-wrapper">
+            <div class="menu-links">
+                <a href="javascript:void(0)" onclick="openReservationFromMenu()">RÉSERVER</a>
+                <a href="#restaurant" onclick="toggleMenu()">LE RESTAURANT</a>
+                <a href="#chefs" onclick="toggleMenu()">LES CHEFS</a>
+                <a href="#experience" onclick="toggleMenu()">L'EXPÉRIENCE</a>
+                <a href="#menu" onclick="toggleMenu()">LE MENU</a>
+                <a href="#shunei-concept" onclick="toggleMenu()">KAISEKI SHUNEI</a>
+                <a href="#informations" onclick="toggleMenu()">INFORMATIONS</a>
+            </div>
+        </div>
+
+        <div class="menu-footer">
+            <div class="footer-center">
+                <img src="img/instagram-icon.png" alt="Instagram" class="insta-logo">
+                <span class="separator">|</span>
+                <div class="lang-switcher-menu">FR / EN</div>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo-and-menu">
+                <div class="logo-kanji">
+                    <span>春</span>
+                    <span>栄</span>
+                    <span>製</span>
+                </div>
+                <div class="menu-trigger" onclick="toggleMenu()">
+                    <div class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="menu-text">MENU</span>
+                </div>
+            </div>
+            <div class="nav-branding">
+                <h1 class="brand-name">KAISEKI SHUNEI</h1>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <a href="javascript:void(0)" class="btn-reservation" onclick="toggleReservation()">RÉSERVER</a>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-bg-image"></div>
+        <div class="hero-content">
+            <h2 class="fade-in">L'Art de la Perfection</h2>
+            <div class="search-box">
+                <input type="text" placeholder="Rechercher une saveur..." class="input-search">
+            </div>
+        </div>
+    </section>
+
+    <div id="reservation-panel" class="side-panel-right">
+        <div class="close-reservation" onclick="toggleReservation()">✕</div>
+        
+        <div class="auth-container">
+            <div id="login-form" class="auth-box">
+                <h3>CONNEXION</h3>
+                <p class="auth-subtitle">Accédez à votre espace Kaiseki</p>
+                <input type="email" placeholder="Email" class="input-auth">
+                <input type="password" placeholder="Mot de passe" class="input-auth">
+                <button class="btn-submit">SE CONNECTER</button>
+                <p class="switch-auth">Pas encore de compte ? <span onclick="switchAuth()">S'inscrire</span></p>
+            </div>
+
+            <div id="register-form" class="auth-box" style="display: none;">
+                <h3>INSCRIPTION</h3>
+                <p class="auth-subtitle">Rejoignez l'expérience Shunei</p>
+                <input type="text" placeholder="Nom complet" class="input-auth">
+                <input type="email" placeholder="Email" class="input-auth">
+                <input type="password" placeholder="Mot de passe" class="input-auth">
+                <input type="text" placeholder="Code Interphone (Optionnel)" class="input-auth">
+                <button class="btn-submit">CRÉER MON COMPTE</button>
+                <p class="switch-auth">Déjà inscrit ? <span onclick="switchAuth()">Se connecter</span></p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="restaurant" class="scroll-section restaurant-view">
+    <div class="restaurant-bg"></div>
+    <div class="blue-overlay"></div> 
+
+    <div class="restaurant-content-wrapper">
+        <div class="close-gallery-btn" onclick="closeGallery()">✕</div>
+
+        <h2 class="center-title">LE RESTAURANT</h2>
+        
+        <div class="arrow-container left" onclick="changeImage(-1)">
+            <img src="img/retour.png" alt="Précédent" class="arrow-icon">
+        </div>
+
+        <div id="viewer-container" class="viewer-container">
+            <img src="img/resto-1.png" id="main-photo" alt="Galerie Shunei">
+        </div>
+
+        <div class="arrow-container right" onclick="changeImage(1)">
+            <img src="img/retour.png" alt="Suivant" class="arrow-icon mirror">
+        </div>
+
+        <div class="story-bottom-right">
+            <div class="story-box">
+                <span class="section-subtitle">NOTRE HÉRITAGE</span>
+                <p>
+                    "Sous l'ombre des cerisiers de Kyoto, le clan <strong>Shunei</strong> forgeait jadis des lames légendaires. 
+                    Aujourd'hui, c'est avec la même précision chirurgicale que nos maîtres découpent les trésors de l'océan. 
+                    Chaque plat est une estampe, chaque saveur un voyage vers les rivages lointains d'Edo, 
+                    où le temps s'arrête pour laisser place à l'excellence."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<!--
+    <section id="chefs" class="scroll-section chefs-section">
+        <div class="chefs-content">
+            <span class="section-subtitle">LES MAÎTRES</span>
+            <h2>Kenzo & Hana</h2>
+            <p>Lui maîtrise le feu et le fer. Elle, la délicatesse des saveurs et l'art du dressage. Un duo inséparable.</p>
+        </div>
+    </section>
+
+    <section id="experience" class="scroll-section experience-section">
+        <div class="banner-blur">
+            <h2>L'Éveil des Sens</h2>
+            <p>Une immersion totale entre tradition et modernité.</p>
+        </div>
+    </section>
+
+    <section id="menu" class="scroll-section menu-section">
+        <span class="section-subtitle">LA CARTE</span>
+        <h2>La Carte Shunei</h2>
+        <p>Découvrez nos créations saisonnières.</p>
+    </section>
+
+    <section id="shunei-concept" class="scroll-section concept-section">
+        <h2>Le Concept Shunei</h2>
+        <p>L'excellence au service de la tradition japonaise.</p>
+    </section>
+
+    <section id="informations" class="scroll-section info-section">
+        <h2>Informations & Accès</h2>
+        <p>Retrouvez-nous au cœur de Paris.</p>
+    </section>
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <script>
+    // --- VARIABLES GALERIE ---
+    let currentImg = 1;
+    const totalImg = 6;
+
+    // --- NAVIGATION & MENU CLASSIQUE ---
+    function toggleMenu() {
+        document.getElementById("side-menu").classList.toggle("open");
+        document.body.classList.toggle("open-nav");
+    }
+
+    function toggleReservation() {
+        document.getElementById("reservation-panel").classList.toggle("open");
+    }
+
+    // --- SYSTÈME GALERIE CIRCULAIRE (PNG) ---
+    function changeImage(direction) {
+        const restaurant = document.getElementById("restaurant");
+        const photo = document.getElementById("main-photo");
+
+        // Si la galerie n'est pas active, on l'ouvre
+        if (!restaurant.classList.contains("gallery-active")) {
+            openGallery();
+            return;
+        }
+
+        // Calcul circulaire 1 -> 6
+        currentImg += direction;
+        if (currentImg > totalImg) currentImg = 1;
+        if (currentImg < 1) currentImg = totalImg;
+
+        // Mise à jour de la source (.png)
+        photo.src = `img/resto-${currentImg}.png`;
+    }
+
+    function openGallery() {
+        document.getElementById("restaurant").classList.add("gallery-active");
+        document.body.classList.add("no-scroll");
+        
+        // Cache le header pour l'immersion
+        const header = document.querySelector("header");
+        if (header) header.style.opacity = "0";
+    }
+
+    function closeGallery() {
+        document.getElementById("restaurant").classList.remove("gallery-active");
+        document.body.classList.remove("no-scroll");
+        
+        const header = document.querySelector("header");
+        if (header) header.style.opacity = "1";
+
+        // Reset
+        currentImg = 1;
+        document.getElementById("main-photo").src = `img/resto-1.png`;
+    }
+
+    // --- GESTION SCROLL HEADER ---
+    window.onscroll = function() {
+        let brand = document.querySelector(".nav-branding");
+        if (brand) {
+            if (window.scrollY > 80) {
+                brand.style.opacity = "0";
+                brand.style.pointerEvents = "none";
+            } else {
+                brand.style.opacity = "1";
+                brand.style.pointerEvents = "auto";
+            }
+        }
+    };
+
+    function switchAuth() {
+        const login = document.getElementById("login-form");
+        const register = document.getElementById("register-form");
+        if(login && register) {
+            login.style.display = (login.style.display === "none") ? "block" : "none";
+            register.style.display = (register.style.display === "none") ? "block" : "none";
+        }
+    }
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,679 @@
+/* =========================================
+   SECTION 1 : VARIABLES ET BASES
+   ========================================= */
+/* =========================================
+   SECTION 1 : VARIABLES ET BASES
+   ========================================= */
+:root {
+    --gold: #C5A059;
+    --dark-bg: #0A0A0A;
+    --navy: #001529; 
+    --ivory: #F4F1EA;
+    --white: #FFFFFF;
+    --gray-border: rgba(197, 160, 89, 0.2);
+    --burgundy: #4A0404; /* Rouge pourpre */
+}
+
+/* ... (Garde ton code SECTION 1 à 3 identique) ... */
+
+/* =========================================
+   SECTION 4 : PANNEAU COULISSANT (BLEU)
+   ========================================= */
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -33.33vw;
+    width: 33.33vw;
+    height: 100vh;
+    background-color: var(--navy);
+    z-index: 2000;
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 220px 40px 60px 220px; 
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    pointer-events: auto;
+}
+
+.side-panel.open { left: 0; }
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    z-index: 4000; /* Toujours au-dessus pour le clic */
+}
+
+.menu-links a {
+    display: inline-block;
+    color: var(--white) !important;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    transition: 0.3s ease-in-out;
+    cursor: pointer !important;
+}
+
+.menu-links a:hover { 
+    color: var(--gold) !important; 
+    transform: translateX(10px); 
+}
+
+/* ... (SECTION 5 à 7 identiques) ... */
+
+/* =========================================
+   SECTION 8 : PANNEAU RÉSERVATION (POURPRE)
+   ========================================= */
+.side-panel-right {
+    position: fixed;
+    top: 0;
+    right: -50vw;
+    width: 50vw;
+    height: 100vh;
+    background-color: var(--burgundy); 
+    z-index: 5000; /* Plus haut que tout le reste */
+    transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(197, 160, 89, 0.3);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+.side-panel-right.open { right: 0; }
+
+.close-reservation {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 1.8rem;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.auth-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.auth-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.input-auth {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 25px;
+    outline: none;
+}
+
+.input-auth:focus { border-bottom: 1px solid var(--gold); }
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid var(--white);
+    color: var(--white);
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.btn-submit:hover {
+    background: var(--white);
+    color: var(--burgundy);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--ivory);
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   SECTION 2 : HEADER ET LOGO
+   ========================================= */
+.main-header {
+    position: fixed;
+    top: 0; 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 40px;
+    z-index: 3000;
+    pointer-events: none; /* Indispensable pour cliquer à travers le vide */
+}
+
+.header-left, .header-right { 
+    display: flex; 
+    align-items: center; 
+    pointer-events: auto; 
+}
+
+.logo-and-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid var(--gray-border);
+    padding: 15px 30px;
+    background: rgba(10, 10, 10, 0.1); 
+    backdrop-filter: blur(5px);
+    transition: all 0.4s ease;
+    max-height: 160px; /* On limite la hauteur pour ne pas gêner les liens */
+}
+
+.open-nav .logo-and-menu {
+    border-right-color: transparent;
+    background: transparent;
+    backdrop-filter: none;
+}
+
+.open-nav .nav-branding, 
+.open-nav .btn-reservation {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.logo-kanji {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.8rem;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: 8px;
+    font-weight: 400;
+    margin-left: 25px;
+    transition: opacity 0.4s ease;
+}
+
+/* =========================================
+   SECTION 3 : ANIMATION MENU TRIGGER
+   ========================================= */
+.menu-trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.hamburger-icon {
+    width: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--white);
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-text {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-top: 5px;
+}
+
+/* État Croix */
+.open-nav .hamburger-icon span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.open-nav .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+}
+.open-nav .hamburger-icon span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================
+   SECTION 4 : PANNEAU COULISSANT (BLEU)
+   ========================================= */
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -33.33vw;
+    width: 33.33vw;
+    height: 100vh;
+    background-color: var(--navy);
+    z-index: 2000;
+    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 220px 40px 60px 220px; 
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    pointer-events: auto;
+}
+
+.side-panel.open { left: 0; }
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    z-index: 4000; /* Toujours au-dessus pour le clic */
+}
+
+.menu-links a {
+    display: inline-block;
+    color: var(--white) !important;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    transition: 0.3s ease-in-out;
+    cursor: pointer !important;
+}
+
+.menu-links a:hover { 
+    color: var(--gold) !important; 
+    transform: translateX(10px); 
+}
+
+
+/* =========================================
+   SECTION 5 : FOOTER DU MENU
+   ========================================= */
+.menu-footer {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+    display: flex;
+    justify-content: center; /* Centre le bloc global */
+    align-items: center;
+}
+
+.footer-center {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Espace généreux entre l'icône et la langue */
+}
+
+.insta-logo { 
+    width: 22px; 
+    filter: invert(1); 
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.insta-logo:hover {
+    opacity: 0.7;
+}
+
+.lang-switcher-menu {
+    border-left: 1px solid rgba(255,255,255,0.2);
+    padding-left: 20px;
+    font-size: 0.8rem;
+    color: var(--white);
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   SECTION 6 : ZONE HERO ET RECHERCHE
+   ========================================= */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* On s'assure que rien ne bloque la vue */
+    overflow: hidden;
+}
+
+.hero-bg-image {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    /* Vérifie bien l'URL de l'image ci-dessous */
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), 
+                      url('https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /* L'image doit être DERRIÈRE tout le contenu */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10; /* Le texte doit être DEVANT l'image */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: auto; /* On laisse le contenu respirer */
+}
+
+.hero-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 3vw, 2rem); 
+    font-style: italic;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+    color: var(--white);
+}
+
+.input-search {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--white);
+    color: var(--white);
+    padding: 10px;
+    width: 320px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    transition: width 0.4s ease;
+}
+
+.input-search:focus { 
+    outline: none; 
+    border-bottom: 2px solid var(--gold); 
+    width: 420px; 
+}
+
+/* =========================================
+   SECTION 7 : BOUTONS ET INTERACTIONS
+   ========================================= */
+.header-right { 
+    padding-top: 25px; 
+}
+
+.btn-reservation {
+    padding: 12px 35px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    transition: 0.4s;
+}
+
+.btn-reservation:hover { 
+    background: var(--gold); 
+    color: var(--dark-bg); 
+}
+
+
+
+/* =========================================
+   SECTION 8 : PANNEAU RÉSERVATION (POURPRE)
+   ========================================= */
+.side-panel-right {
+    position: fixed;
+    top: 0;
+    right: -50vw;
+    width: 50vw;
+    height: 100vh;
+    background-color: var(--burgundy); 
+    z-index: 5000; /* Plus haut que tout le reste */
+    transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(197, 160, 89, 0.3);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+.side-panel-right.open { right: 0; }
+
+.close-reservation {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 1.8rem;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.auth-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.auth-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.input-auth {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 25px;
+    outline: none;
+}
+
+.input-auth:focus { border-bottom: 1px solid var(--gold); }
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid var(--white);
+    color: var(--white);
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.btn-submit:hover {
+    background: var(--white);
+    color: var(--burgundy);
+}
+
+
+
+
+
+
+/* Activation du scroll fluide pour tout le site */
+html {
+    scroll-behavior: smooth;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   SECTION 9 : RESTAURANT & GALERIE SYSTEM
+   ========================================= */
+.restaurant-view {
+    padding: 0 !important;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.restaurant-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                url('img/restaurant-fond.png') center/cover no-repeat;
+    transition: filter 0.6s ease, transform 0.6s ease;
+    z-index: 1;
+}
+
+/* Filtre bleu pour l'immersion galerie */
+.blue-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 30, 60, 0.65);
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.restaurant-content-wrapper {
+    position: relative;
+    z-index: 3;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Titre principal agrandi */
+.center-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    letter-spacing: 18px;
+    color: var(--white);
+    margin: 0;
+    transition: 0.5s ease;
+}
+
+/* --- NAVIGATION KUNAI (Taille x2 & Animation) --- */
+.arrow-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 100;
+}
+
+.arrow-container.left { left: 50px; }
+.arrow-container.right { right: 50px; }
+
+.arrow-icon {
+    width: 100px;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.arrow-icon.mirror { transform: scaleX(-1); }
+
+/* Animation Kunai Gauche au survol */
+.arrow-container.left:hover .arrow-icon {
+    transform: scale(1.15) translateX(-8px);
+}
+
+/* Animation Kunai Droit au survol (maintient le miroir) */
+.arrow-container.right:hover .arrow-icon {
+    transform: scale(1.15) scaleX(-1) translateX(-8px);
+}
+
+/* --- VISIONNEUSE CENTRALE --- */
+.viewer-container {
+    position: absolute;
+    z-index: 50;
+    display: none;
+    max-width: 65vw;
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 50px rgba(0,0,0,0.9);
+}
+.viewer-container img { width: 100%; display: block; }
+
+/* --- BLOC HISTOIRE (Bas à droite) --- */
+.story-bottom-right {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    max-width: 450px;
+    text-align: right;
+    z-index: 5;
+    transition: 0.5s ease;
+}
+
+.section-subtitle {
+    display: block;
+    font-size: 0.9rem;
+    letter-spacing: 5px;
+    color: var(--gold);
+    margin-bottom: 15px;
+}
+
+.story-bottom-right p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* --- CROIX DE FERMETURE (Sous Réserver) --- */
+.close-gallery-btn {
+    position: fixed;
+    top: 100px; 
+    right: 40px;
+    font-size: 3rem;
+    color: white;
+    cursor: pointer;
+    z-index: 6000;
+    display: none;
+    text-shadow: 0 0 15px rgba(0,0,0,0.8);
+}
+
+/* --- LOGIQUE D'ACTIVATION --- */
+.gallery-active .restaurant-bg { filter: blur(15px) brightness(0.4); transform: scale(1.05); }
+.gallery-active .blue-overlay { opacity: 1; }
+.gallery-active .viewer-container, .gallery-active .close-gallery-btn { display: block; }
+.gallery-active .center-title, .gallery-active .story-bottom-right { opacity: 0; pointer-events: none; }
+.gallery-active .main-header { display: none !important; }
+
+.no-scroll { overflow: hidden !important; }
