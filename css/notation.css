@@ -1,0 +1,214 @@
+/* ========================================= 
+     PAGE NOTATION (Optimisée)
+========================================= */
+.page-notation {
+    /* Intégration de ton image de fond avec overlay sombre */
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), 
+                url('img/fond.png') center/cover no-repeat fixed;
+    color: #eaeaea;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+}
+
+.page-notation .admin-topbar { padding: 30px 50px; }
+
+.page-notation .btn-retour {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.page-notation .btn-retour:hover { border-color: #bc9c64; color: #bc9c64; }
+
+/* Conteneur et Carte */
+.notation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.notation-card {
+    background: rgba(17, 17, 17, 0.9); /* Transparence pour voir le fond */
+    backdrop-filter: blur(10px);      /* Effet de flou luxueux */
+    border: 1px solid rgba(188, 156, 100, 0.2);
+    width: 100%;
+    max-width: 550px;
+    padding: 50px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    position: relative;
+}
+
+/* Liseré doré décoratif */
+.notation-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: #bc9c64;
+}
+
+.notation-header { text-align: center; margin-bottom: 35px; }
+.notation-header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #bc9c64;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+.notation-header p { color: #888; font-style: italic; font-size: 0.9rem; }
+
+/* ÉTOILES (Optimisées) */
+.rating-box { text-align: center; margin-bottom: 30px; }
+.rating-box span { 
+    display: block; margin-bottom: 15px; text-transform: uppercase; 
+    letter-spacing: 3px; font-size: 0.7rem; color: #bc9c64;
+}
+
+.stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; }
+.stars input { display: none; }
+.stars label {
+    font-size: 2.5rem; color: #2a2a2a; cursor: pointer; transition: 0.3s;
+}
+
+.stars label:hover, .stars label:hover ~ label,
+.stars input:checked ~ label {
+    color: #bc9c64;
+    text-shadow: 0 0 15px rgba(188, 156, 100, 0.4);
+}
+
+/* ZONE COMMENTAIRE et BOUTON */
+.comment-box textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(188, 156, 100, 0.15);
+    color: #fff; padding: 15px; font-size: 0.9rem;
+    resize: none; transition: 0.3s; margin-bottom: 25px;
+}
+
+.comment-box textarea:focus { outline: none; border-color: #bc9c64; background: rgba(0, 0, 0, 0.5); }
+
+.btn-send {
+    background: transparent;
+    border: 1px solid #bc9c64;
+    color: #bc9c64;
+    padding: 15px 40px;
+    font-weight: 700; font-size: 0.75rem; letter-spacing: 3px;
+    cursor: pointer; transition: 0.4s; width: 100%; /* Bouton plus large pour mobile */
+}
+
+.btn-send:hover {
+    background: #bc9c64; color: #0a0a0a;
+    box-shadow: 0 10px 20px rgba(188, 156, 100, 0.2);
+}
+
+
+.experience-view {
+    padding: 120px 0;
+    background: #0d0d0d;
+}
+
+.timeline-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 40px 0;
+}
+
+/* La ligne centrale */
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+}
+
+.timeline-item {
+    margin-bottom: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.timeline-date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark-bg);
+    color: var(--gold);
+    font-family: 'Playfair Display';
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 10px;
+    border: 1px solid var(--gold);
+    z-index: 10;
+}
+
+.timeline-content {
+    width: 40%;
+    padding: 20px;
+    text-align: right;
+}
+
+/* Inversion un sur deux */
+.timeline-item:nth-child(even) .timeline-content {
+    text-align: left;
+    margin-left: 55%;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-right: 55%;
+}
+
+.timeline-content h3 {
+    font-family: 'Playfair Display';
+    color: var(--gold);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+.timeline-content p {
+    color: #aaa;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+/* Animation au survol */
+.timeline-item:hover .timeline-date {
+    background: var(--gold);
+    color: #000;
+    transition: 0.4s;
+}
+
+
+.btn-note {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.3); /* Très discret au début */
+    font-size: 0.9rem;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn-note:hover {
+    color: var(--gold);
+    transform: scale(1.3);
+    text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+}
+
+/* On s'assure que la cellule de prix est bien alignée */
+.order-table td.price {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Aligne le prix et l'étoile à droite */
+}
