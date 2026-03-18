@@ -1,0 +1,133 @@
+/* =========================================
+    PAGE ADMIN - ISOLATION COMPLETE
+   ========================================= */
+
+body.page-admin {
+    background-color: #0d0d0d !important;
+    color: #e0e0e0 !important;
+    font-family: 'Lato', sans-serif !important;
+    margin: 0;
+    padding: 40px;
+}
+
+.page-admin h1, .page-admin h2, .page-admin h3, .page-admin .user-name {
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- Header Administration --- */
+.page-admin .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #8a7042;
+    padding-bottom: 25px;
+    margin-bottom: 40px;
+}
+
+/* --- Stats Bar --- */
+.page-admin .admin-stats-bar {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.page-admin .stat-card {
+    background: #1a1a1a;
+    padding: 15px 25px;
+    border-left: 3px solid #bc9c64;
+    border-radius: 4px;
+}
+
+.page-admin .stat-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.page-admin .stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #bc9c64;
+}
+
+/* --- Barre de Recherche --- */
+.page-admin .search-container input, 
+.page-admin .search-container select {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #444;
+    color: white;
+    padding: 10px;
+    font-family: 'Lato', sans-serif;
+}
+
+.page-admin .search-container input:focus {
+    outline: none;
+    border-bottom: 1px solid #bc9c64;
+    width: 300px;
+}
+
+/* --- Tableau Admin --- */
+.page-admin .table-wrapper {
+    background: #141414;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #222;
+}
+
+.page-admin .user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.page-admin .user-table th {
+    text-transform: uppercase;
+    color: #bc9c64;
+    padding: 20px;
+    text-align: left;
+    border-bottom: 2px solid #333;
+}
+
+.page-admin .user-table td {
+    padding: 20px;
+    border-bottom: 1px solid #222;
+}
+
+/* --- Badges et Statuts --- */
+.page-admin .badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75em;
+    font-weight: bold;
+}
+.page-admin .badge.client { background: rgba(188, 156, 100, 0.2); color: #bc9c64; border: 1px solid #bc9c64; }
+.page-admin .badge.livreur { background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid #555; }
+
+.page-admin .status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+.page-admin .status-dot.active { background-color: #4caf50; }
+
+/* --- Boutons --- */
+.page-admin .btn-kaiseki {
+    background: transparent;
+    border: 1px solid #444;
+    color: #e0e0e0;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.page-admin .btn-kaiseki:hover {
+    border-color: #bc9c64;
+    color: #bc9c64;
+}
+
+.page-admin .btn-action-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}

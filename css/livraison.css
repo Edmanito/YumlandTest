@@ -1,0 +1,149 @@
+/* page */
+
+.page-delivery{
+    background:black;
+    color:white;
+    min-height:100vh;
+    font-family:'Montserrat', sans-serif;
+}
+
+/* header */
+
+.delivery-header{
+    background:#111;
+    padding:20px;
+    border-bottom:2px solid var(--gold);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.delivery-header h1{
+    font-size:1.2rem;
+    letter-spacing:2px;
+}
+
+.delivery-header a{
+    color:#ff4444;
+    text-decoration:none;
+    font-size:0.8rem;
+    border:1px solid #ff4444;
+    padding:5px 10px;
+}
+
+/* main */
+
+.page-delivery main{
+    padding:20px;
+}
+
+/* cards */
+
+.delivery-card{
+    background:#1a1a1a;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+#order-1{
+    border-left:5px solid var(--gold);
+}
+
+#order-2{
+    border-left:5px solid #666;
+}
+
+/* header card */
+
+.delivery-card > div:first-child{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+/* statut */
+
+.delivery-card span{
+    font-weight:bold;
+}
+
+.delivery-card span:last-child{
+    font-size:0.7rem;
+    background:#333;
+    padding:3px 8px;
+    border-radius:4px;
+}
+
+/* client */
+
+.delivery-card h2{
+    font-size:1.4rem;
+    margin-bottom:5px;
+}
+
+.delivery-card p{
+    font-size:1rem;
+    font-weight:bold;
+}
+
+.delivery-card p + p{
+    font-style:italic;
+    color:#bc9c64;
+    font-size:0.85rem;
+    margin-top:5px;
+    font-weight:normal;
+}
+
+/* commande */
+
+.delivery-card div:nth-child(3){
+    background:#222;
+    padding:10px;
+    border-radius:5px;
+    margin-bottom:20px;
+    font-size:0.8rem;
+}
+
+.delivery-card div:nth-child(3) p:last-child{
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.delivery-card div:nth-child(3) span{
+    color:#4caf50;
+}
+
+/* boutons */
+
+.delivery-card div:last-child{
+    display:grid;
+    grid-template-columns:1fr 2fr;
+    gap:10px;
+}
+
+.delivery-card a{
+    padding:15px;
+    background:#333;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.delivery-card button{
+    padding:15px;
+    background:#4caf50;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.delivery-card button:disabled{
+    width:100%;
+    background:#333;
+    color:#666;
+}
