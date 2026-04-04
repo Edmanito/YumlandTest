@@ -1,0 +1,399 @@
+/* =========================================
+   KAISEKI SHUNEI — HEADER.CSS
+   ========================================= */
+
+/* ── HEADER FIXE ── */
+.main-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 40px;
+    z-index: 5000; /* au dessus de tout */
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.logo-and-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid var(--gray-border);
+    padding: 15px 30px;
+    background: rgba(10, 10, 10, 0.8); /* plus opaque pour lisibilité */
+    backdrop-filter: blur(5px);
+    transition: all 0.4s ease;
+    z-index: 5001;
+}
+
+.logo-kanji {
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: 8px;
+    margin-left: 25px;
+}
+
+/* ── NAVIGATION DROITE ── */
+.header-right {
+    gap: 30px;
+    height: 100px;
+}
+
+.profile-trigger {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.profile-trigger:hover { transform: scale(1.1); }
+
+.profile-icon-nav {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: invert(1);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.profile-trigger:hover .profile-icon-nav {
+    transform: scale(1.15);
+    filter: invert(1) drop-shadow(0 0 8px var(--gold));
+}
+
+.btn-reservation { white-space: nowrap; }
+
+/* ── HAMBURGER ── */
+.menu-trigger {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hamburger-icon span {
+    width: 25px;
+    height: 1px;
+    background: var(--white);
+    margin-bottom: 6px;
+    display: block;
+    transition: 0.3s;
+}
+
+.menu-text {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    margin-top: 5px;
+}
+
+/* ── OVERLAY SOMBRE (quand menu ouvert) ── */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 3999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+body.open-nav::after {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ── MENU LATÉRAL BLEU ── */
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 33.33vw;
+    height: 100vh;
+    background-color: var(--navy);
+    z-index: 4000;
+    transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 140px 40px 60px 60px;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.side-panel.open {
+    left: 0;
+}
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.menu-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.menu-links a:hover {
+    color: var(--gold);
+    transform: translateX(10px);
+}
+
+/* ── FOOTER DU MENU ── */
+.menu-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-main-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.admin-link {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.admin-link:hover { opacity: 0.7; }
+
+.insta-logo {
+    width: 22px;
+    filter: invert(1);
+}
+
+.lang-switcher-menu {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    padding-left: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+/* ── PANEL RÉSERVATION POURPRE ── */
+.side-panel-right {
+    position: fixed;
+    top: 0;
+    right: -100vw;
+    width: 50vw;
+    height: 100vh;
+    background-color: var(--burgundy);
+    z-index: 4500;
+    transition: right 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.side-panel-right.open {
+    right: 0;
+}
+
+.close-reservation {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.auth-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    letter-spacing: 5px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--white);
+    background: transparent;
+    color: var(--white);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.btn-submit:hover {
+    background: var(--white);
+    color: var(--burgundy);
+}
+
+.input-auth {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 25px;
+    outline: none;
+}
+
+/* =========================================
+   RESPONSIVE MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .main-header { padding: 10px 15px; }
+
+    .logo-and-menu { padding: 8px 12px; }
+
+    .logo-kanji { font-size: 1.2rem; margin-bottom: 8px; }
+
+    .brand-name { font-size: 0.9rem; letter-spacing: 3px; margin-left: 8px; }
+
+    .header-right { gap: 8px; height: 60px; }
+
+    .profile-trigger { width: 45px; height: 45px; }
+
+    .btn-reservation {
+        font-size: 0.65rem;
+        padding: 8px 12px;
+        letter-spacing: 1px;
+    }
+
+    .side-panel {
+        width: 100vw;
+        padding: 120px 30px 80px 30px;
+    }
+
+    .side-panel-right {
+        width: 100vw;
+        padding: 70px 25px 40px 25px;
+    }
+
+    .auth-box h3 { font-size: 1.6rem; letter-spacing: 3px; }
+}
+
+/* =========================================
+   EFFET PUSH ET MASQUAGE TEXTE (MENU OUVERT)
+   ========================================= */
+
+/* 1. Masquer le texte "Bienvenue" en douceur */
+.nav-branding {
+    transition: opacity 0.3s ease;
+}
+body.open-nav .nav-branding {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 2. Disparition totale de la grosse boîte noire (Kanji + Menu) */
+body.open-nav .logo-and-menu {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-20px);
+}
+
+/* 3. Préparer le site pour l'effet "Push" fluide */
+.main-header,
+.hero-section,
+.scroll-section {
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* 4. Décaler tout le site vers la droite (33.33vw = largeur exacte de votre panneau bleu) */
+body.open-nav .main-header,
+body.open-nav .hero-section,
+body.open-nav .scroll-section {
+    transform: translateX(33.33vw); 
+}
+
+/* 5. Le style de vos nouvelles "3 barres" dans la partie bleue */
+.close-menu-blue {
+    position: absolute;
+    top: 40px; /* Aligné avec le haut */
+    left: 40px; /* Aligné à gauche dans le menu */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 4001;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.3s; /* Apparaît avec un très léger retard élégant */
+}
+
+body.open-nav .close-menu-blue {
+    opacity: 1;
+}
+
+.close-menu-blue span {
+    width: 25px;
+    height: 1px;
+    background: var(--white);
+    display: block;
+    transition: 0.3s;
+}
+
+.close-menu-blue:hover span {
+    background: var(--gold);
+}
+
+/* 6. Adaptation parfaite pour le téléphone mobile (le panel prend 100vw) */
+@media (max-width: 768px) {
+    body.open-nav .main-header,
+    body.open-nav .hero-section,
+    body.open-nav .scroll-section {
+        transform: translateX(100vw);
+    }
+    .close-menu-blue {
+        top: 30px;
+        left: 30px;
+    }
+}
+
+html {
+    scroll-behavior: smooth; /* Transforme les sauts brutaux en défilement doux */
+}
+
+body {
+    overflow-x: hidden; /* Empêche les bugs visuels sur les bords de l'écran lors des animations */
+}

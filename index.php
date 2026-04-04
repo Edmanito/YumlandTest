@@ -29,13 +29,22 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
 <body class="page-accueil">
 
     <div id="side-menu" class="side-panel">
+        <div class="close-menu-blue" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <div class="menu-content-wrapper">
             <div class="menu-links">
-                <a href="javascript:void(0)" onclick="openReservationFromMenu()">RÉSERVER</a>
+                <?php if (estConnecte()): ?>
+                    <a href="php/carte.php">RÉSERVER</a>
+                <?php else: ?>
+                    <a href="javascript:void(0)" onclick="openReservationFromMenu()">RÉSERVER</a>
+                <?php endif; ?>
                 <a href="#restaurant" onclick="toggleMenu()">LE RESTAURANT</a>
                 <a href="#chefs" onclick="toggleMenu()">LES CHEFS</a>
                 <a href="#experience" onclick="toggleMenu()">L'EXPÉRIENCE</a>
-                <a href="#menu" onclick="toggleMenu()">LE MENU</a>
+                <a href="php/carte.php">LE MENU</a>
                 <a href="#informations" onclick="toggleMenu()">INFORMATIONS</a>
             </div>
         </div>
@@ -84,11 +93,17 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                     DÉCONNEXION
                 </a>
             <?php endif; ?>
+            
             <div class="profile-trigger" onclick="gererClicProfil()">
                 <img src="img/profil-vide.png" alt="Profil" class="profile-icon-nav">
             </div>
-            <a href="javascript:void(0)" class="btn-reservation" onclick="toggleReservation()">COMMANDER</a>
-        </div>
+            
+            <?php if (estConnecte()): ?>
+                <a href="php/carte.php" class="btn-reservation">COMMANDER</a>
+            <?php else: ?>
+                <a href="javascript:void(0)" class="btn-reservation" onclick="toggleReservation()">COMMANDER</a>
+            <?php endif; ?>
+            </div>
     </header>
 
     <section class="hero-section">
@@ -101,7 +116,6 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
         </div>
     </section>
 
-    <!-- PANEL CONNEXION -->
     <div id="reservation-panel" class="side-panel-right">
         <div class="close-reservation" onclick="toggleReservation()">✕</div>
         <div class="auth-container">
@@ -148,6 +162,7 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                 </div>
             </div>
         </div>
+    </section>
 
     <section id="chefs" class="scroll-section chefs-view">
         <div class="chefs-container">
@@ -227,11 +242,11 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
 
     <section id="menu" class="scroll-section menu-view-minimal">
         <div class="menu-bg-overlay"></div>
-        <a href="carte.html" target="_blank" class="menu-compact-box">
+        <a href="php/carte.php" class="menu-compact-box">
             <span class="section-subtitle">DÉCOUVRIR</span>
             <h2 class="menu-title-small">LA CARTE</h2>
             <div class="line-gold"></div>
-            <p class="click-info">OUVRIR DANS UN NOUVEL ONGLET</p>
+            <p class="click-info">ENTRER DANS L'EXPÉRIENCE</p>
         </a>
     </section>
 
@@ -265,7 +280,8 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
         function accesSecurise() {
             const code = prompt("Veuillez entrer votre code d'accès :");
             if (code === null) return;
-            const choix = code.trim().toLowerCase();           if (choix === "administration")  { 
+            const choix = code.trim().toLowerCase();           
+            if (choix === "administration")  { 
                 window.location.href = "php/admin.php"; 
             }
             else if (choix === "commande")   { window.location.href = "php/commande.php"; }
