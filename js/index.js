@@ -43,6 +43,34 @@ function closeFullRegister() {
     }
 }
 
+// 🪄 LE CHEF D'ORCHESTRE POUR LE SCROLL FLUIDE (Zéro flash noir !)
+document.addEventListener('DOMContentLoaded', () => {
+    // On cible uniquement les liens du menu qui pointent vers une section (commençant par #)
+    const menuLinks = document.querySelectorAll('.menu-links a[href^="#"]');
+    
+    menuLinks.forEach(link => {
+        // On supprime le comportement HTML de base pour éviter qu'il n'entre en conflit
+        link.removeAttribute('onclick');
+        
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // 1. On bloque la téléportation instantanée
+            const targetId = this.getAttribute('href').substring(1); // Récupère le mot (ex: "restaurant")
+            
+            // 2. On referme le menu doucement
+            document.getElementById("side-menu").classList.remove("open");
+            document.body.classList.remove("open-nav");
+            
+            // 3. On attend 500ms (la durée exacte de votre effet Push) avant de scroller vers le bas !
+            setTimeout(() => {
+                const section = document.getElementById(targetId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 500); 
+        });
+    });
+});
+
 /* ── GALERIE RESTAURANT ── */
 
 function changeImage(direction) {
