@@ -31,9 +31,15 @@ function afficherCartes($commandes, $btnLabel, $btnClass, $nextStatut) {
             <?php foreach ($cmd['articles'] as $art): ?>
             <div class="item-line">
                 <span class="item-qty"><?= $art['quantite'] ?>×</span>
-                <span class="item-name"><?= htmlspecialchars($art['id']) ?></span>
-                <span style="margin-left:auto;color:#bc9c64;"><?= $art['prix_unitaire'] * $art['quantite'] ?>€</span>
-            </div>
+                <span class="item-name"><?= htmlspecialchars($art['nom'] ?? $art['id']) ?></span>
+                <span style="margin-left:auto;color:#bc9c64;">
+            <?php 
+            // On cherche 'prix_unitaire', sinon 'prix', sinon 0 par défaut
+                $pu = $art['prix_unitaire'] ?? $art['prix'] ?? 0;
+                echo number_format($pu * $art['quantite'], 2);
+            ?>€
+            </span>
+        </div>
             <?php endforeach; ?>
             <div style="border-top:1px solid #222;margin-top:8px;padding-top:8px;font-weight:700;color:#bc9c64;">
                 Total : <?= $cmd['prix_total'] ?>€
