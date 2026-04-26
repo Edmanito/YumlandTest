@@ -66,6 +66,17 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
         .status-pill.delivering { background: #2a1a3a; color: #a855f7; }
         .progress-fill { background: #bc9c64; border-radius: 3px; }
         .admin-view-tag { background: #bc9c64; color: black; padding: 2px 8px; font-size: 0.7rem; border-radius: 10px; margin-left: 10px; vertical-align: middle; }
+        
+        /* Styles pour la modale d'édition */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: #111; border: 1px solid #bc9c64; padding: 30px; border-radius: 5px; width: 90%; max-width: 500px; position: relative; color: white; }
+        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem; color: #bc9c64; }
+        .modal-content .input-group { margin-bottom: 15px; }
+        .modal-content label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #bc9c64; }
+        .modal-content input { width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid #333; color: white; box-sizing: border-box; }
+        .modal-content .btn-submit { width: 100%; padding: 15px; background: #bc9c64; color: black; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .char-counter { font-size: 0.75rem; text-align: right; color: #888; margin-top: 2px; }
     </style>
 </head>
 <body class="page-profil">
@@ -102,7 +113,9 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
             <section class="profil-section info-section">
                 <div class="section-title">
                     <h3>COORDONNÉES</h3>
-                    <span class="edit-icon" title="Modification disponible en phase 3">✎</span>
+                    <?php if ($user['id'] === $currentUser['id']): ?>
+                        <span class="edit-icon" id="btn-edit-profile" style="cursor: pointer;" title="Modifier mes informations">✎</span>
+                    <?php endif; ?>
                 </div>
                 <div class="info-card">
                     <div class="info-group">
@@ -176,6 +189,39 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
             </section>
         </main>
     </div>
+
+    <div id="edit-profile-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" id="close-edit-modal">✕</span>
+            <h2 style="font-family:'Playfair Display'; color:#bc9c64; margin-bottom: 20px;">Modifier mon profil</h2>
+            
+            <form id="form-edit-profile" novalidate>
+                <div class="input-group">
+                    <label>Nouvelle adresse email</label>
+                    <input type="email" name="login" value="<?= htmlspecialchars($user['login']) ?>" required maxlength="50">
+                    <div class="char-counter" id="counter-edit-email">0 / 50</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Nouveau mot de passe (laisser vide pour ne rien changer)</label>
+                    <div style="position: relative;">
+                        <input type="password" name="mdp" placeholder="••••••••" maxlength="30" style="padding-right: 40px;">
+                        <button type="button" id="toggleEditPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2em;">👁️</button>
+                    </div>
+                    <div class="char-counter" id="counter-edit-mdp">0 / 30</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Téléphone</label>
+                    <input type="tel" name="telephone" value="<?= htmlspecialchars($user['infos']['telephone'] ?? '') ?>" required>
+                </div>
+
+                <button type="submit" class="btn-submit">ENREGISTRER</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/profil.js"></script>
 
 </body>
 </html>

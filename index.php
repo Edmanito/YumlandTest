@@ -25,25 +25,23 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/index.css">
     <style>
-    .auth-error { background: rgba(255,70,70,0.1); border: 1px solid rgba(255,70,70,0.3); color: #ff6b6b; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; text-align: center; }
-    .auth-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 20px; display: block; }
-    .switch-auth { margin-top: 15px; font-size: 0.8rem; color: #666; }
+        .auth-error { background: rgba(255,70,70,0.1); border: 1px solid rgba(255,70,70,0.3); color: #ff6b6b; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; text-align: center; }
+        .auth-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 20px; display: block; }
+        .switch-auth { margin-top: 15px; font-size: 0.8rem; color: #666; }
 
-   
-    body.reservation-open #btn-connexion-main, 
-    body.reservation-open .profile-trigger {
-        display: none !important; 
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
+        body.reservation-open #btn-connexion-main, 
+        body.reservation-open .profile-trigger {
+            display: none !important; 
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
 
-    
-    .close-reservation {
-        z-index: 9999 !important;
-        cursor: pointer !important;
-        position: absolute !important;
-    }
-</style>
+        .close-reservation {
+            z-index: 9999 !important;
+            cursor: pointer !important;
+            position: absolute !important;
+        }
+    </style>
 </head>
 <body class="page-accueil">
 
@@ -145,7 +143,8 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                 <div class="profile-trigger" onclick="toggleReservation()">
                     <img src="img/profil-vide.png" alt="Profil" class="profile-icon-nav">
                 </div>
-<a href="javascript:void(0)" class="btn-reservation" id="btn-connexion-main" onclick="toggleReservation()">CONNEXION</a>            <?php endif; ?>
+                <a href="javascript:void(0)" class="btn-reservation" id="btn-connexion-main" onclick="toggleReservation()">CONNEXION</a>            
+            <?php endif; ?>
         </div>
     </header>
 
@@ -168,9 +167,20 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                 <?php if ($erreur): ?>
                     <div class="auth-error"><?= htmlspecialchars($erreur) ?></div>
                 <?php endif; ?>
-                <form action="php/connexion.php" method="POST">
-                    <input type="email" name="email" placeholder="Email" class="input-auth" required>
-                    <input type="password" name="password" placeholder="Mot de passe" class="input-auth" required>
+                <form action="php/connexion.php" method="POST" id="form-connexion" novalidate>
+                    <div style="margin-bottom: 10px;">
+                        <input type="email" name="email" placeholder="Email" class="input-auth" required maxlength="50">
+                        <div class="char-counter" id="counter-login-email" style="font-size: 0.75rem; text-align: right; color: #888; margin-top: 2px;">0 / 50</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="position: relative;">
+                            <input type="password" name="password" placeholder="Mot de passe" class="input-auth" required maxlength="30" style="padding-right: 40px;">
+                            <button type="button" id="toggleLoginPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2em;">👁️</button>
+                        </div>
+                        <div class="char-counter" id="counter-login-mdp" style="font-size: 0.75rem; text-align: right; color: #888; margin-top: 2px;">0 / 30</div>
+                    </div>
+                    
                     <button type="submit" class="btn-submit">SE CONNECTER</button>
                 </form>
                 <p class="switch-auth">
@@ -309,7 +319,6 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
         </div>
     </section>
 
-   
     <script src="js/langue.js"></script>
     <script src="js/index.js"></script>
     <script>
@@ -330,7 +339,6 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
             setTimeout(toggleReservation, 500);
         }
 
-        
         function accesSecurise() {
             const estClient = <?php echo (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'client') ? 'true' : 'false'; ?>;
             const estConnecte = <?php echo estConnecte() ? 'true' : 'false'; ?>;
