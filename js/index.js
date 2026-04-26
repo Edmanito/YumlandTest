@@ -4,75 +4,6 @@
 
 let currentImg = 1;
 
-/* ── NAVIGATION & PANELS ── */
-
-function toggleMenu() {
-    document.getElementById("side-menu").classList.toggle("open");
-    document.body.classList.toggle("open-nav");
-}
-
-function toggleReservation() {
-    document.getElementById("reservation-panel").classList.toggle("open");
-}
-
-function openReservationFromMenu() {
-    toggleMenu();
-    setTimeout(toggleReservation, 500);
-}
-
-function openFullRegister() {
-    if (document.getElementById("reservation-panel").classList.contains("open")) {
-        toggleReservation();
-    }
-    const overlay = document.getElementById('full-register-overlay');
-    if (overlay) {
-        overlay.style.display = 'block';
-        setTimeout(() => overlay.classList.add('active'), 10);
-        document.body.style.overflow = "hidden";
-    }
-}
-
-function closeFullRegister() {
-    const overlay = document.getElementById('full-register-overlay');
-    if (overlay) {
-        overlay.classList.remove('active');
-        setTimeout(() => {
-            overlay.style.display = 'none';
-            document.body.style.overflow = "auto";
-        }, 500);
-    }
-}
-
-// 🪄 LE CHEF D'ORCHESTRE POUR LE SCROLL FLUIDE (Zéro flash noir !)
-document.addEventListener('DOMContentLoaded', () => {
-    // On cible uniquement les liens du menu qui pointent vers une section (commençant par #)
-    const menuLinks = document.querySelectorAll('.menu-links a[href^="#"]');
-    
-    menuLinks.forEach(link => {
-        // On supprime le comportement HTML de base pour éviter qu'il n'entre en conflit
-        link.removeAttribute('onclick');
-        
-        link.addEventListener('click', function(e) {
-            e.preventDefault(); // 1. On bloque la téléportation instantanée
-            const targetId = this.getAttribute('href').substring(1); // Récupère le mot (ex: "restaurant")
-            
-            // 2. On referme le menu doucement
-            document.getElementById("side-menu").classList.remove("open");
-            document.body.classList.remove("open-nav");
-            
-            // 3. On attend 500ms (la durée exacte de votre effet Push) avant de scroller vers le bas !
-            setTimeout(() => {
-                const section = document.getElementById(targetId);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 500); 
-        });
-    });
-});
-
-/* ── GALERIE RESTAURANT ── */
-
 function changeImage(direction) {
     const photo = document.getElementById("main-photo");
     currentImg += direction;
@@ -96,8 +27,6 @@ function closeGallery() {
     document.body.classList.remove("no-scroll");
     document.querySelector("header").style.opacity = "1";
 }
-
-/* ── HISTOIRES CHEFS ── */
 
 const histoires = {
     kenji: {

@@ -3,7 +3,7 @@
         {
             "id": "U001",
             "login": "jean.dupont@email.com",
-            "mot_de_passe": "$2y$10$dt1aaX2JlKvU43s5dfOgj.VOCCdXbioO6Nfol9hj7hoVrHVM81lWu",
+            "mot_de_passe": "caca",
             "role": "client",
             "statut": "actif",
             "premium": false,
@@ -12,7 +12,7 @@
                 "nom": "Dupont",
                 "prenom": "Jean",
                 "telephone": "0612345678",
-                "adresse": "12 Rue du Sushi, 75000 Paris",
+                "adresse": "12 Rue du Sushi, 75001 Paris",
                 "etage": "4",
                 "interphone": "1234"
             },
@@ -28,7 +28,7 @@
         {
             "id": "U002",
             "login": "elena.rodriguez@email.com",
-            "mot_de_passe": "$2y$10$3CTprQ3VVWKxHWSV8dLStO4N9\/VnpObetuQ6PBL3QU1t57qI5Qo9S",
+            "mot_de_passe": "popo",
             "role": "client",
             "statut": "actif",
             "premium": true,
@@ -53,7 +53,7 @@
         {
             "id": "U003",
             "login": "thomas.miller@email.com",
-            "mot_de_passe": "$2y$10$8\/BORiiOJZk65XvQXSLeYOiAy5UhhjW5QzwdvmCbXzgHbI2gb4LsC",
+            "mot_de_passe": "toto",
             "role": "client",
             "statut": "suspendu",
             "premium": false,
@@ -78,7 +78,7 @@
         {
             "id": "U004",
             "login": "yuki.tanaka@email.com",
-            "mot_de_passe": "$2y$10$F.AnkoZNOIwTPI724WResOQ.G.VXt0.\/CvUFJG.h..VN8XcDBxk9W",
+            "mot_de_passe": "yuyu",
             "role": "client",
             "statut": "actif",
             "premium": false,
@@ -103,7 +103,7 @@
         {
             "id": "U005",
             "login": "jabar.abdul@email.com",
-            "mot_de_passe": "$2y$10$IbJGvHqJq.\/G.QN40w86TOF3rWPmChGEVvclUAC4A.wQM6h14eLVS",
+            "mot_de_passe": "jaja",
             "role": "client",
             "statut": "actif",
             "premium": false,
@@ -126,9 +126,34 @@
             }
         },
         {
+            "id": "U006",
+            "login": "marie.leblanc@email.com",
+            "mot_de_passe": "mamamiya",
+            "role": "client",
+            "statut": "actif",
+            "premium": true,
+            "remise": 15,
+            "infos": {
+                "nom": "Leblanc",
+                "prenom": "Marie",
+                "telephone": "0667891234",
+                "adresse": "14 Rue de la Paix, 75002 Paris",
+                "etage": "5",
+                "interphone": "4242"
+            },
+            "fidelite": {
+                "points": 990,
+                "badge": "PLATINUM"
+            },
+            "dates": {
+                "inscription": "2025-12-01",
+                "derniere_connexion": "2026-04-01"
+            }
+        },
+        {
             "id": "A001",
             "login": "admin@kaiseki.com",
-            "mot_de_passe": "$2y$10$CiFCa\/Vb4DbbhEJlinJDAu\/FOwUya1vuF.y4WqW\/1\/N.Ga2o5ARSy",
+            "mot_de_passe": "admin1234",
             "role": "admin",
             "statut": "actif",
             "premium": false,
@@ -147,13 +172,13 @@
             },
             "dates": {
                 "inscription": "2025-01-01",
-                "derniere_connexion": "2026-03-20"
+                "derniere_connexion": "2026-04-04"
             }
         },
         {
             "id": "A002",
             "login": "superadmin@kaiseki.com",
-            "mot_de_passe": "$2y$10$yN9Ci4\/BSdWb\/aIukFaZ\/O4FQCSLD.4LiHGqGLyWrUrCDlLcdobdO",
+            "mot_de_passe": "roro",
             "role": "admin",
             "statut": "actif",
             "premium": false,
@@ -178,14 +203,14 @@
         {
             "id": "R001",
             "login": "kenji@kaiseki.com",
-            "mot_de_passe": "$2y$10$IcoegIC0zv4wlfw3beg52uJLFgS2EHH04DgfMbFS7ytBj5p0crULS",
+            "mot_de_passe": "caca",
             "role": "restaurateur",
             "statut": "actif",
             "premium": false,
             "remise": 0,
             "infos": {
-                "nom": "Kenji",
-                "prenom": "Maitre",
+                "nom": "Tanaka",
+                "prenom": "Kenji",
                 "telephone": "0100000003",
                 "adresse": "3 Rue André del Sarte, 75018 Paris",
                 "etage": "",
@@ -203,7 +228,7 @@
         {
             "id": "L001",
             "login": "t.kovacs@kaiseki.com",
-            "mot_de_passe": "$2y$10$xKVl0T6QfRm4GdCdDxwb9errqBTAlDV0ynaHYeNmm9YLzMfPfIBnS",
+            "mot_de_passe": "koko",
             "role": "livreur",
             "statut": "actif",
             "premium": false,
@@ -226,9 +251,34 @@
             }
         },
         {
-            "id": "U22941F",
+            "id": "L002",
+            "login": "a.martin@kaiseki.com",
+            "mot_de_passe": "caca",
+            "role": "livreur",
+            "statut": "actif",
+            "premium": false,
+            "remise": 0,
+            "infos": {
+                "nom": "Martin",
+                "prenom": "Alexis",
+                "telephone": "0689012345",
+                "adresse": "5 Rue des Abbesses, 75018 Paris",
+                "etage": "",
+                "interphone": ""
+            },
+            "fidelite": {
+                "points": 0,
+                "badge": ""
+            },
+            "dates": {
+                "inscription": "2025-09-01",
+                "derniere_connexion": "2026-04-01"
+            }
+        },
+        {
+            "id": "U403263",
             "login": "mansourwajih2@gmail.com",
-            "mot_de_passe": "$2y$10$5BYvTWOdAYh\/oP6ADg8iZOT8MdD0N3rkNDensUdg\/85WzXaqzpK4i",
+            "mot_de_passe": "$2y$10$wHbpVDZJXUq0WYIVFy0CrufYNs8W2vaHFwfOzgF0byHP6DYdMz6E2",
             "role": "client",
             "statut": "actif",
             "premium": false,
@@ -236,18 +286,18 @@
             "infos": {
                 "nom": "Wajih",
                 "prenom": "Mansour",
-                "telephone": "0600000000",
-                "adresse": "6 rue Robert Marchand",
+                "telephone": "07 45 15 58 43",
+                "adresse": "",
                 "etage": "2",
-                "interphone": "2220"
+                "interphone": "A1234"
             },
             "fidelite": {
                 "points": 0,
                 "badge": "BRONZE"
             },
             "dates": {
-                "inscription": "2026-03-23",
-                "derniere_connexion": "2026-03-23"
+                "inscription": "2026-04-05",
+                "derniere_connexion": "2026-04-05"
             }
         }
     ]

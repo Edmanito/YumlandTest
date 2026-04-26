@@ -2,6 +2,10 @@
 require_once 'includes/config.php';
 require_once 'includes/fonctions.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $erreurs = [
     'champs_vides'            => 'Veuillez remplir tous les champs.',
     'identifiants_incorrects' => 'Email ou mot de passe incorrect.',
@@ -21,19 +25,29 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/index.css">
     <style>
-        .auth-error { background: rgba(255,70,70,0.1); border: 1px solid rgba(255,70,70,0.3); color: #ff6b6b; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; }
-        .auth-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 20px; display: block; }
-        .switch-auth { margin-top: 15px; font-size: 0.8rem; color: #666; }
-    </style>
+    .auth-error { background: rgba(255,70,70,0.1); border: 1px solid rgba(255,70,70,0.3); color: #ff6b6b; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; text-align: center; }
+    .auth-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 20px; display: block; }
+    .switch-auth { margin-top: 15px; font-size: 0.8rem; color: #666; }
+
+   
+    body.reservation-open #btn-connexion-main, 
+    body.reservation-open .profile-trigger {
+        display: none !important; 
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    
+    .close-reservation {
+        z-index: 9999 !important;
+        cursor: pointer !important;
+        position: absolute !important;
+    }
+</style>
 </head>
 <body class="page-accueil">
 
     <div id="side-menu" class="side-panel">
-        <div class="close-menu-blue" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
         <div class="menu-content-wrapper">
             <div class="menu-links">
                 <?php if (estConnecte()): ?>
@@ -48,15 +62,48 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                 <a href="#informations" onclick="toggleMenu()">INFORMATIONS</a>
             </div>
         </div>
+
         <div class="menu-footer">
-            <div class="footer-main-container">
-                <div class="footer-admin-top">
-                    <a href="javascript:void(0)" class="admin-link" onclick="accesSecurise()">ADMINISTRATION</a>
-                </div>
-                <div class="footer-main-info">
-                    <img src="img/instagram-icon.png" alt="Instagram" class="insta-logo">
-                    <span class="separator">|</span>
-                    <div class="lang-switcher-menu">FR / EN</div>
+            <div class="menu-footer-separator"></div>
+            <a href="javascript:void(0)" class="admin-link" onclick="accesSecurise()">ADMINISTRATION</a>
+            <div class="menu-footer-line"></div>
+
+            <div class="social-links">
+                <a href="https://www.instagram.com/kaisekishunei_off" target="_blank" title="Instagram">
+                    <img src="img/instagram-icon.png" alt="Instagram">
+                </a>
+                <a href="https://www.tiktok.com/@kaisekishunei_off" target="_blank" title="TikTok">
+                    <img src="img/tiktok-icon.png" alt="TikTok">
+                </a>
+                <a href="https://www.youtube.com/@kaisekishunei_off" target="_blank" title="YouTube">
+                    <img src="img/youtube-icon.png" alt="YouTube">
+                </a>
+                <a href="https://www.twitter.com/kaisekishunei_off" target="_blank" title="Twitter / X">
+                    <img src="img/tweeter-icon.png" alt="Twitter">
+                </a>
+            </div>
+
+            <div class="lang-wrapper">
+                <button class="lang-btn" onclick="toggleLang(event)">
+                    <span style="font-size:1.1rem;">🌐</span>
+                    <span id="lang-current">FR</span>
+                </button>
+                <div class="lang-dropdown" id="lang-dropdown">
+                    <a href="#" onclick="setLang('FR', event)">🇫🇷 Français</a>
+                    <a href="#" onclick="setLang('EN', event)">🇬🇧 English</a>
+                    <a href="#" onclick="setLang('ES', event)">🇪🇸 Español</a>
+                    <a href="#" onclick="setLang('DE', event)">🇩🇪 Deutsch</a>
+                    <a href="#" onclick="setLang('JA', event)">🇯🇵 日本語</a>
+                    <a href="#" onclick="setLang('RU', event)">🇷🇺 Русский</a>
+                    <a href="#" onclick="setLang('AR', event)">🇸🇦 العربية</a>
+                    <a href="#" onclick="setLang('KO', event)">🇰🇷 한국어</a>
+                    <a href="#" onclick="setLang('ZH', event)">🇨🇳 中文</a>
+                    <a href="#" onclick="setLang('IT', event)">🇮🇹 Italiano</a>
+                    <a href="#" onclick="setLang('PT', event)">🇵🇹 Português</a>
+                    <a href="#" onclick="setLang('NL', event)">🇳🇱 Nederlands</a>
+                    <a href="#" onclick="setLang('HI', event)">🇮🇳 हिन्दी</a>
+                    <a href="#" onclick="setLang('TR', event)">🇹🇷 Türkçe</a>
+                    <a href="#" onclick="setLang('PL', event)">🇵🇱 Polski</a>
                 </div>
             </div>
         </div>
@@ -89,21 +136,17 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
 
         <div class="header-right">
             <?php if (estConnecte()): ?>
-                <a href="actions/logout.php" style="display:block;cursor:pointer;color:var(--gold);font-size:0.7rem;letter-spacing:2px;margin-right:20px;border-bottom:1px solid var(--gold);text-decoration:none;">
-                    DÉCONNEXION
-                </a>
-            <?php endif; ?>
-            
-            <div class="profile-trigger" onclick="gererClicProfil()">
-                <img src="img/profil-vide.png" alt="Profil" class="profile-icon-nav">
-            </div>
-            
-            <?php if (estConnecte()): ?>
+                <a href="actions/logout.php" class="btn-deconnexion">DÉCONNEXION</a>
+                <div class="profile-trigger" onclick="window.location.href='php/profil.php'">
+                    <img src="img/profil-vide.png" alt="Profil" class="profile-icon-nav">
+                </div>
                 <a href="php/carte.php" class="btn-reservation">COMMANDER</a>
             <?php else: ?>
-                <a href="javascript:void(0)" class="btn-reservation" onclick="toggleReservation()">COMMANDER</a>
-            <?php endif; ?>
-            </div>
+                <div class="profile-trigger" onclick="toggleReservation()">
+                    <img src="img/profil-vide.png" alt="Profil" class="profile-icon-nav">
+                </div>
+<a href="javascript:void(0)" class="btn-reservation" id="btn-connexion-main" onclick="toggleReservation()">CONNEXION</a>            <?php endif; ?>
+        </div>
     </header>
 
     <section class="hero-section">
@@ -122,14 +165,12 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
             <div class="auth-box">
                 <h3>CONNEXION</h3>
                 <span class="auth-subtitle">Accédez à votre espace Kaiseki</span>
-
                 <?php if ($erreur): ?>
                     <div class="auth-error"><?= htmlspecialchars($erreur) ?></div>
                 <?php endif; ?>
-
-                <form action="actions/login.php" method="POST">
-                    <input type="email" name="login" placeholder="Email" class="input-auth" required>
-                    <input type="password" name="mdp" placeholder="Mot de passe" class="input-auth" required>
+                <form action="php/connexion.php" method="POST">
+                    <input type="email" name="email" placeholder="Email" class="input-auth" required>
+                    <input type="password" name="password" placeholder="Mot de passe" class="input-auth" required>
                     <button type="submit" class="btn-submit">SE CONNECTER</button>
                 </form>
                 <p class="switch-auth">
@@ -268,27 +309,93 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
         </div>
     </section>
 
+   
+    <script src="js/langue.js"></script>
     <script src="js/index.js"></script>
     <script>
-        function gererClicProfil() {
-            <?php if (estConnecte()): ?>
-                window.location.href = 'php/profil.php';
-            <?php else: ?>
-                toggleReservation();
-            <?php endif; ?>
+        function toggleMenu() {
+            const menu = document.getElementById("side-menu");
+            menu.classList.toggle("open");
+            document.body.classList.toggle("open-nav");
         }
+
+        function toggleReservation() {
+            const panel = document.getElementById("reservation-panel");
+            panel.classList.toggle("open");
+            document.body.classList.toggle("reservation-open");
+        }
+
+        function openReservationFromMenu() {
+            toggleMenu();
+            setTimeout(toggleReservation, 500);
+        }
+
+        
         function accesSecurise() {
+            const estClient = <?php echo (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'client') ? 'true' : 'false'; ?>;
+            const estConnecte = <?php echo estConnecte() ? 'true' : 'false'; ?>;
+
+            if (estConnecte && estClient) {
+                alert("Accès Restreint : Vous n'avez pas les autorisations nécessaires pour accéder à l'administration.");
+                return; 
+            }
+
             const code = prompt("Veuillez entrer votre code d'accès :");
             if (code === null) return;
-            const choix = code.trim().toLowerCase();           
-            if (choix === "administration")  { 
-                window.location.href = "php/admin.php"; 
-            }
-            else if (choix === "commande")   { window.location.href = "php/commande.php"; }
-            else if (choix === "livraison")  { window.location.href = "php/livraison.php"; }
-            else { alert("ACCÈS REFUSÉ !"); }
-        }
-    </script>
 
+            const choix = code.trim().toLowerCase();
+
+            if (choix === "administration")      { window.location.href = "php/admin.php"; }
+            else if (choix === "commande")         { window.location.href = "php/commande.php"; }
+            else if (choix === "livraison")       { window.location.href = "php/livraison.php"; }
+            else { 
+                alert("ACCÈS REFUSÉ ! Code incorrect."); 
+            }
+        }
+
+        function toggleLang(e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            const dd = document.getElementById('lang-dropdown');
+            if (!dd) return;
+            if (dd.style.display === 'flex') {
+                dd.style.display = 'none';
+            } else {
+                dd.style.cssText = `
+                    display: flex !important;
+                    flex-direction: column;
+                    position: absolute;
+                    bottom: 38px;
+                    left: 0;
+                    background: #0d1f3c;
+                    border: 1px solid rgba(197,160,89,0.4);
+                    min-width: 170px;
+                    z-index: 99999;
+                    box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+                `;
+            }
+        }
+
+        function setLang(code, e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            document.getElementById('lang-dropdown').style.display = 'none';
+            document.getElementById('lang-current').textContent = code;
+            if (typeof applyLang === 'function') applyLang(code);
+        }
+
+        document.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.lang-wrapper');
+            const dd = document.getElementById('lang-dropdown');
+            if (dd && wrapper && !wrapper.contains(e.target)) {
+                dd.style.display = 'none';
+            }
+        });
+
+        (function() {
+            const saved = localStorage.getItem('kaiseki_lang') || 'FR';
+            const el = document.getElementById('lang-current');
+            if (el) el.textContent = saved;
+            if (saved !== 'FR' && typeof applyLang === 'function') applyLang(saved);
+        })();
+    </script>
 </body>
 </html>

@@ -2,18 +2,16 @@
 require_once '../includes/config.php';
 require_once '../includes/fonctions.php';
 
-//requireRole('admin');
+requireRole('admin');
 
 $data = lireJSON(JSON_USERS);
 $utilisateurs = $data['utilisateurs'] ?? [];
 
-// Filtre par rôle
 $filtre = $_GET['role'] ?? 'all';
 if ($filtre !== 'all') {
     $utilisateurs = array_filter($utilisateurs, fn($u) => $u['role'] === $filtre);
 }
 
-// Recherche
 $recherche = strtolower($_GET['q'] ?? '');
 if ($recherche) {
     $utilisateurs = array_filter($utilisateurs, function($u) use ($recherche) {
@@ -25,7 +23,6 @@ if ($recherche) {
 
 $utilisateurs = array_values($utilisateurs);
 
-// Stats
 $dataAll = lireJSON(JSON_USERS)['utilisateurs'] ?? [];
 $nbClients   = count(array_filter($dataAll, fn($u) => $u['role'] === 'client'));
 $nbLivreurs  = count(array_filter($dataAll, fn($u) => $u['role'] === 'livreur'));
@@ -67,8 +64,8 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
 
         <section class="controls-section">
             <form method="GET" class="search-wrapper">
-                <input type="text" name="q" placeholder="Rechercher un nom, email..." value="<?= htmlspecialchars($recherche) ?>">
-                <select name="role" onchange="this.form.submit()">
+                <input type="text" name="q" id="searchInput" placeholder="Rechercher un nom, email..." value="<?= htmlspecialchars($recherche) ?>">
+                <select name="role" id="roleFilter" onchange="this.form.submit()">
                     <option value="all"         <?= $filtre === 'all'         ? 'selected' : '' ?>>Tous les rôles</option>
                     <option value="client"      <?= $filtre === 'client'      ? 'selected' : '' ?>>Clients</option>
                     <option value="livreur"     <?= $filtre === 'livreur'     ? 'selected' : '' ?>>Livreurs</option>
@@ -98,7 +95,7 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
                         </tr>
                         <?php else: ?>
                         <?php foreach ($utilisateurs as $u): ?>
-                        <tr class="user-row <?= $u['statut'] === 'suspendu' ? 'blocked' : '' ?>">
+                        <tr class="user-row <?= $u['statut'] === 'suspendu' ? 'blocked' : '' ?>" data-role="<?= $u['role'] ?>">
                             <td>
                                 <div class="user-info">
                                     <div class="avatar <?= $u['role'] === 'livreur' ? 'livreur-av' : '' ?>">
@@ -123,9 +120,8 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
                             </td>
                             <td class="actions-cell">
                                 <div class="btn-group">
-                                    <?php if ($u['role'] === 'client'): ?>
-                                        <a href="profil.php?id=<?= $u['id'] ?>" class="btn-icon view" title="Voir Profil">👁</a>
-                                    <?php endif; ?>
+                                    <a href="profil.php?id=<?= $u['id'] ?>" class="btn-icon view" title="Voir Profil">👁</a>
+                                    
                                     <a href="../actions/bloquer.php?id=<?= $u['id'] ?>" class="btn-icon block-toggle" title="<?= $u['statut'] === 'suspendu' ? 'Débloquer' : 'Bloquer' ?>">
                                         <?= $u['statut'] === 'suspendu' ? '✅' : '🚫' ?>
                                     </a>

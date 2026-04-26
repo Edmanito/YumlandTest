@@ -11,7 +11,7 @@
     justify-content: space-between;
     align-items: flex-start;
     padding: 20px 40px;
-    z-index: 5000; /* au dessus de tout */
+    z-index: 5000;
     pointer-events: none;
     transition: opacity 0.5s ease;
 }
@@ -29,7 +29,7 @@
     align-items: center;
     border-right: 1px solid var(--gray-border);
     padding: 15px 30px;
-    background: rgba(10, 10, 10, 0.8); /* plus opaque pour lisibilité */
+    background: rgba(10, 10, 10, 0.8);
     backdrop-filter: blur(5px);
     transition: all 0.4s ease;
     z-index: 5001;
@@ -52,8 +52,9 @@
 
 /* ── NAVIGATION DROITE ── */
 .header-right {
-    gap: 30px;
-    height: 100px;
+    gap: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .profile-trigger {
@@ -61,28 +62,47 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+    margin-top: 10px;
     position: relative;
+    background: transparent;
     transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+.profile-icon-nav {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    filter: invert(1);
+    transition: all 0.3s ease;
+}
+
+.profile-trigger:hover .profile-icon-nav {
+    transform: scale(1.05);
+    filter: invert(1) drop-shadow(0 0 12px var(--gold));
 }
 
 .profile-trigger:hover { transform: scale(1.1); }
 
-.profile-icon-nav {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: invert(1);
-    transition: transform 0.3s ease, filter 0.3s ease;
+.btn-reservation {
+    white-space: nowrap;
+    text-decoration: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.profile-trigger:hover .profile-icon-nav {
-    transform: scale(1.15);
-    filter: invert(1) drop-shadow(0 0 8px var(--gold));
+.btn-deconnexion {
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    border-bottom: 1px solid var(--gold);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.3s;
 }
 
-.btn-reservation { white-space: nowrap; }
+.btn-deconnexion:hover { opacity: 0.6; }
 
 /* ── HAMBURGER ── */
 .menu-trigger {
@@ -107,14 +127,12 @@
     margin-top: 5px;
 }
 
-/* ── OVERLAY SOMBRE (quand menu ouvert) ── */
+/* ── OVERLAY SOMBRE ── */
 body::after {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 3999;
     opacity: 0;
@@ -130,39 +148,43 @@ body.open-nav::after {
 /* ── MENU LATÉRAL BLEU ── */
 .side-panel {
     position: fixed;
-    top: 0;
-    left: -100vw;
-    width: 33.33vw;
+    top: 0; left: 0;
+    width: 500px;
+    max-width: 90vw;
     height: 100vh;
     background-color: var(--navy);
     z-index: 4000;
-    transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 140px 40px 60px 60px;
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    padding: 230px 40px 40px 200px;
+    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.5);
     pointer-events: auto;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .side-panel.open {
-    left: 0;
+    transform: translateX(0);
 }
 
+/* ── LIENS DU MENU ── */
 .menu-links {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    align-items: flex-start;
+    gap: 35px;
+    width: 100%;
 }
 
 .menu-links a {
     color: var(--white);
     text-decoration: none;
-    font-size: 1rem;
-    letter-spacing: 4px;
+    font-size: 1.1rem;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    transition: 0.3s;
+    transition: 0.4s;
     white-space: nowrap;
 }
 
@@ -171,78 +193,179 @@ body.open-nav::after {
     transform: translateX(10px);
 }
 
-/* ── FOOTER DU MENU ── */
+/* ── FOOTER DU MENU — RETRAVILLÉ ── */
 .menu-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px 0;
     width: 100%;
     display: flex;
-    justify-content: center;
-}
-
-.footer-main-container {
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    gap: 16px;
+    padding-top: 10px;
 }
 
-.footer-main-info {
-    display: flex;
-    align-items: center;
-    gap: 30px;
+/* Petit trait doré séparateur */
+.menu-footer-separator {
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
 }
 
+/* ADMINISTRATION — encadré distinct */
 .admin-link {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
+    font-size: 0.65rem;
+    letter-spacing: 5px;
     color: var(--gold);
     text-decoration: none;
     font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    padding: 7px 12px;
+    display: inline-block;
+}
+
+.admin-link:hover {
+    background: rgba(197, 160, 89, 0.1);
+    border-color: var(--gold);
+}
+
+/* Ligne séparatrice fine */
+.menu-footer-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── RÉSEAUX SOCIAUX ── */
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    opacity: 0.55;
+    transition: 0.3s;
+    text-decoration: none;
+    font-size: 1.2rem;
+    /* reset des styles hérités des menu-links a */
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    white-space: normal !important;
+    color: var(--white) !important;
+}
+
+.social-links a:hover {
+    opacity: 1;
+    transform: translateY(-3px) !important;
+}
+
+.social-links img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
     transition: 0.3s;
 }
 
-.admin-link:hover { opacity: 0.7; }
-
-.insta-logo {
-    width: 22px;
-    filter: invert(1);
+.social-links a:hover img {
+    filter: invert(1) drop-shadow(0 0 6px var(--gold));
 }
 
-.lang-switcher-menu {
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    padding-left: 20px;
-    font-size: 0.8rem;
+/* ── BOUTON LANGUE (GLOBE) ── */
+.lang-wrapper {
+    position: relative;
+    z-index: 10001;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.45);
+    font-size: 0.75rem;
     letter-spacing: 2px;
+    padding: 0;
+    transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.lang-btn:hover { color: var(--white); }
+
+/* Dropdown langues */
+.lang-dropdown {
+    display: none;
+    position: absolute;
+    bottom: 38px;
+    left: 0;
+    background: #0d1f3c;
+    border: 1px solid rgba(197,160,89,0.25);
+    min-width: 170px;
+    flex-direction: column;
+    z-index: 9999;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+}
+
+.lang-dropdown.open {
+    display: flex;
+}
+
+.lang-dropdown a {
+    color: rgba(255,255,255,0.65) !important;
+    padding: 10px 16px !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 1px !important;
+    text-decoration: none;
+    transition: 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    white-space: nowrap;
+    text-transform: none !important;
+}
+
+.lang-dropdown a:hover {
+    background: rgba(197,160,89,0.1);
+    color: var(--gold) !important;
+    transform: none !important;
+    padding-left: 22px !important;
 }
 
 /* ── PANEL RÉSERVATION POURPRE ── */
 .side-panel-right {
     position: fixed;
-    top: 0;
-    right: -100vw;
+    top: 0; right: 0;
     width: 50vw;
     height: 100vh;
     background-color: var(--burgundy);
     z-index: 4500;
-    transition: right 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     padding: 80px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 .side-panel-right.open {
-    right: 0;
+    transform: translateX(0);
 }
 
 .close-reservation {
     position: absolute;
-    top: 40px;
-    right: 40px;
+    top: 40px; right: 40px;
     font-size: 1.8rem;
     cursor: pointer;
+    color: var(--white);
+    z-index: 4600;
+    transition: transform 0.3s ease;
 }
+
+.close-reservation:hover { transform: rotate(90deg); color: var(--gold); }
 
 .auth-box h3 {
     font-family: 'Playfair Display', serif;
@@ -283,117 +406,57 @@ body.open-nav::after {
 @media (max-width: 768px) {
 
     .main-header { padding: 10px 15px; }
-
     .logo-and-menu { padding: 8px 12px; }
-
     .logo-kanji { font-size: 1.2rem; margin-bottom: 8px; }
-
     .brand-name { font-size: 0.9rem; letter-spacing: 3px; margin-left: 8px; }
-
-    .header-right { gap: 8px; height: 60px; }
-
+    .header-right { gap: 10px; height: 60px; }
     .profile-trigger { width: 45px; height: 45px; }
-
-    .btn-reservation {
-        font-size: 0.65rem;
-        padding: 8px 12px;
-        letter-spacing: 1px;
-    }
+    .profile-icon-nav { width: 100px; height: 100px; }
+    .btn-reservation { font-size: 0.65rem; padding: 8px 12px; letter-spacing: 1px; }
+    .btn-deconnexion { font-size: 0.6rem; }
 
     .side-panel {
         width: 100vw;
-        padding: 120px 30px 80px 30px;
+        max-width: 100vw;
+        padding: 160px 30px 40px 30px;
+        align-items: center;
     }
+
+    .menu-links { align-items: center; }
+    .menu-links a { font-size: 1.1rem; letter-spacing: 4px; text-align: center; }
+
+    .menu-footer { align-items: center; }
+    .social-links { justify-content: center; }
+    .lang-wrapper { display: flex; justify-content: center; }
+    .lang-dropdown { left: 50%; transform: translateX(-50%); bottom: 40px; }
 
     .side-panel-right {
         width: 100vw;
         padding: 70px 25px 40px 25px;
     }
-
-    .auth-box h3 { font-size: 1.6rem; letter-spacing: 3px; }
 }
 
-/* =========================================
-   EFFET PUSH ET MASQUAGE TEXTE (MENU OUVERT)
-   ========================================= */
 
-/* 1. Masquer le texte "Bienvenue" en douceur */
-.nav-branding {
-    transition: opacity 0.3s ease;
-}
-body.open-nav .nav-branding {
-    opacity: 0;
-    pointer-events: none;
-}
 
-/* 2. Disparition totale de la grosse boîte noire (Kanji + Menu) */
-body.open-nav .logo-and-menu {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-20px);
+
+
+
+
+/* On cache le bouton de réservation (Connexion) */
+body.reservation-open .btn-reservation {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(20px);
+    transition: all 0.4s ease;
 }
 
-/* 3. Préparer le site pour l'effet "Push" fluide */
-.main-header,
-.hero-section,
-.scroll-section {
-    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+/* On cache aussi l'icône de profil pour libérer l'espace visuel */
+body.reservation-open .profile-trigger {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: all 0.4s ease;
 }
 
-/* 4. Décaler tout le site vers la droite (33.33vw = largeur exacte de votre panneau bleu) */
-body.open-nav .main-header,
-body.open-nav .hero-section,
-body.open-nav .scroll-section {
-    transform: translateX(33.33vw); 
-}
-
-/* 5. Le style de vos nouvelles "3 barres" dans la partie bleue */
-.close-menu-blue {
-    position: absolute;
-    top: 40px; /* Aligné avec le haut */
-    left: 40px; /* Aligné à gauche dans le menu */
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    z-index: 4001;
-    opacity: 0;
-    transition: opacity 0.3s ease 0.3s; /* Apparaît avec un très léger retard élégant */
-}
-
-body.open-nav .close-menu-blue {
-    opacity: 1;
-}
-
-.close-menu-blue span {
-    width: 25px;
-    height: 1px;
-    background: var(--white);
-    display: block;
-    transition: 0.3s;
-}
-
-.close-menu-blue:hover span {
-    background: var(--gold);
-}
-
-/* 6. Adaptation parfaite pour le téléphone mobile (le panel prend 100vw) */
-@media (max-width: 768px) {
-    body.open-nav .main-header,
-    body.open-nav .hero-section,
-    body.open-nav .scroll-section {
-        transform: translateX(100vw);
-    }
-    .close-menu-blue {
-        top: 30px;
-        left: 30px;
-    }
-}
-
-html {
-    scroll-behavior: smooth; /* Transforme les sauts brutaux en défilement doux */
-}
-
-body {
-    overflow-x: hidden; /* Empêche les bugs visuels sur les bords de l'écran lors des animations */
+.close-reservation {
+    z-index: 5100; /* Plus haut que le header qui est à 5000 */
 }

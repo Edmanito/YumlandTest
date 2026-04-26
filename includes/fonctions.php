@@ -3,6 +3,7 @@
 // KAISEKI SHUNEI — FONCTIONS.PHP
 // =========================================
 
+
 function lireJSON($fichier) {
     if (!file_exists($fichier)) return [];
     $contenu = file_get_contents($fichier);
@@ -11,11 +12,17 @@ function lireJSON($fichier) {
     return $data ?? [];
 }
 
+
 function ecrireJSON($fichier, $data) {
     return file_put_contents(
         $fichier,
         json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
     );
+}
+
+
+function sauvegarderJSON($fichier, $data) {
+    return ecrireJSON($fichier, $data);
 }
 
 function genererID($prefixe = 'U') {
@@ -52,18 +59,20 @@ function ajouterUtilisateur($nouvelUser) {
     return ecrireJSON(JSON_USERS, $data);
 }
 
+
 function estConnecte() {
     return isset($_SESSION['user']);
 }
 
+
 function aLeRole($role) {
     if (!estConnecte()) return false;
-    return $_SESSION['user']['role'] === $role;
+    $userRole = $_SESSION['user']['role'];
+    return ($userRole === $role || $userRole === 'admin');
 }
 
 function requireConnexion() {
     if (!estConnecte()) {
-        // Déterminer le bon chemin selon où on est
         $profondeur = substr_count($_SERVER['PHP_SELF'], '/');
         $redirect = $profondeur > 2 ? '../index.php' : 'index.php';
         header('Location: ' . $redirect);
@@ -71,17 +80,12 @@ function requireConnexion() {
     }
 }
 
+
 function requireRole($role) {
-    if (!estConnecte()) {
+    if (!estConnecte() || !aLeRole($role)) {
         $profondeur = substr_count($_SERVER['PHP_SELF'], '/');
         $redirect = $profondeur > 2 ? '../index.php' : 'index.php';
-        header('Location: ' . $redirect);
-        exit;
-    }
-    if (!aLeRole($role)) {
-        $profondeur = substr_count($_SERVER['PHP_SELF'], '/');
-        $redirect = $profondeur > 2 ? '../index.php' : 'index.php';
-        header('Location: ' . $redirect);
+        header('Location: ' . $redirect . '?erreur=acces_refuse');
         exit;
     }
 }
