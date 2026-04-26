@@ -28,6 +28,39 @@
                 "expedition": "2026-04-05T21:40:33"
             },
             "id_livreur": "L002"
+        },
+        {
+            "id": "CMD002",
+            "id_client": "U1AC74B",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "p03",
+                    "nom": "Tataki de Wagyu A5",
+                    "quantite": 1,
+                    "prix_unitaire": 48
+                },
+                {
+                    "type": "plat",
+                    "id": "M003",
+                    "nom": "Menu Duo Kaiseki",
+                    "quantite": 1,
+                    "prix_unitaire": 180
+                }
+            ],
+            "prix_total": 228,
+            "paiement": {
+                "statut": "paye",
+                "methode": "cybank",
+                "date_transaction": "2026-04-26T13:03:18"
+            },
+            "dates": {
+                "commande": "2026-04-26T13:03:18",
+                "planification": null
+            }
         }
     ]
 }

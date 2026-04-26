@@ -28,9 +28,9 @@ $montant = number_format($total, 2, '.', '');
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
 $host = $_SERVER['HTTP_HOST']; 
+$chemin_dossier = dirname($_SERVER['PHP_SELF']); 
 
-$url_retour = $protocol . "://" . $host . "/php/retour_paiement.php";
-
+$url_retour = $protocol . "://" . $host . $chemin_dossier . "/retour_paiement.php";
 
 $key = getAPIKey($vendeur);
 $sep = "#";
