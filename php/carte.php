@@ -64,6 +64,36 @@ $categories = [
                 <span class="search-icon">✦</span>
             </div>
         </div>
+        <div class="filter-panel">
+            <div class="filter-group">
+                <label>Régime :</label>
+                <select id="filter-regime">
+                    <option value="tous">Tous les régimes</option>
+                    <option value="vegetarien">Végétarien</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="halal">Halal</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Saveur :</label>
+                <select id="filter-saveur">
+                    <option value="tous">Toutes</option>
+                    <option value="epice">Épicé</option>
+                    <option value="sucre">Sucré</option>
+                    <option value="sale">Salé</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Trier par :</label>
+                <select id="sort-price">
+                    <option value="default">Par défaut</option>
+                    <option value="asc">Prix croissant</option>
+                    <option value="desc">Prix décroissant</option>
+                </select>
+            </div>
+        </div>
     </section>
 
     <nav class="cat-nav">
