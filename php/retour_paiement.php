@@ -27,6 +27,8 @@ $vider_panier    = false;
 $message         = "Erreur de validation des données.";
 $newId           = "";
 $type_retour     = "inconnu"; // 'nouveau' ou 'supplement'
+$type_commande      = 'livraison';
+$date_planification = null;
 
 // On valide la signature CYBank OU notre bypass ticket à 0€
 if ($control_recu === $control_calcule || $bank_status === "SUCCESS_TICKETS") {

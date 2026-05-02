@@ -99,7 +99,7 @@
             "id": "CMD004",
             "id_client": "U1AC74B",
             "type": "livraison",
-            "statut": "en_attente",
+            "statut": "annulee",
             "adresse_livraison": "",
             "articles": [],
             "prix_total": 0,

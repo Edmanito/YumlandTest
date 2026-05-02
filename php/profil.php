@@ -33,7 +33,8 @@ $labelStatuts = [
     'en_preparation' => 'En préparation',
     'pret'           => 'Prêt',
     'en_livraison'   => 'En livraison',
-    'livree'         => 'Livré'
+    'livree'         => 'Livré',
+    'annulee'        => 'Annulée'
 ];
 
 $classStatuts = [
@@ -41,7 +42,8 @@ $classStatuts = [
     'en_preparation' => 'cooking',
     'pret'           => 'ready',
     'en_livraison'   => 'delivering',
-    'livree'         => 'done'
+    'livree'         => 'done',
+    'annulee'        => 'canceled'
 ];
 
 $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
@@ -64,6 +66,7 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
         .status-pill.cooking { background: #001a3a; color: #3b82f6; }
         .status-pill.ready { background: #1a3a1a; color: #22c55e; }
         .status-pill.delivering { background: #2a1a3a; color: #a855f7; }
+        .status-pill.canceled { background: #3a1a1a; color: #ef4444; }
         .progress-fill { background: #bc9c64; border-radius: 3px; }
         .admin-view-tag { background: #bc9c64; color: black; padding: 2px 8px; font-size: 0.7rem; border-radius: 10px; margin-left: 10px; vertical-align: middle; }
         

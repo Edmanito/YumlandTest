@@ -46,10 +46,17 @@ foreach ($commandes as &$cmd) {
         $cmd['articles'] = $nouveaux_articles;
         $cmd['prix_total'] = $nouveau_total;
 
+        // --- NOUVEAU : GESTION DE L'ANNULATION ---
+        if (empty($nouveaux_articles) || $nouveau_total == 0) {
+            $cmd['statut'] = 'annulee';
+        } else {
+            $cmd['statut'] = 'en_attente';
+        }
+
         // Gestion de la différence de prix (le cahier des charges)
         if ($nouveau_total > $ancien_total) {
             // La commande est plus chère : elle repasse en statut "A payer" (différence)
-            // Dans ce script simplifié, on la laisse en_attente mais on change le statut de paiement
+            // Dans ce script simplifié, on change le statut de paiement
             $cmd['paiement']['statut'] = 'partiel'; 
         } 
         else if ($nouveau_total < $ancien_total) {
