@@ -40,7 +40,7 @@
                     "type": "plat",
                     "id": "p03",
                     "nom": "Tataki de Wagyu A5",
-                    "quantite": 1,
+                    "quantite": 4,
                     "prix_unitaire": 48
                 },
                 {
@@ -51,15 +51,165 @@
                     "prix_unitaire": 180
                 }
             ],
-            "prix_total": 228,
+            "prix_total": 372,
             "paiement": {
-                "statut": "paye",
+                "statut": "partiel",
                 "methode": "cybank",
                 "date_transaction": "2026-04-26T13:03:18"
             },
             "dates": {
                 "commande": "2026-04-26T13:03:18",
                 "planification": null
+            }
+        },
+        {
+            "id": "CMD003",
+            "id_client": "U1AC74B",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "M001",
+                    "nom": "Menu Omakase Prestige",
+                    "quantite": 1,
+                    "prix_unitaire": 120
+                },
+                {
+                    "type": "plat",
+                    "id": "p01",
+                    "nom": "Edamame à la Truffe Noire",
+                    "quantite": 2,
+                    "prix_unitaire": 18
+                }
+            ],
+            "prix_total": 156,
+            "paiement": {
+                "statut": "partiel",
+                "methode": "cybank",
+                "date_transaction": "2026-05-02T00:07:26"
+            },
+            "dates": {
+                "commande": "2026-05-02T00:07:26",
+                "planification": null
+            }
+        },
+        {
+            "id": "CMD004",
+            "id_client": "U1AC74B",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [],
+            "prix_total": 0,
+            "paiement": {
+                "statut": "paye",
+                "methode": "cybank",
+                "date_transaction": "2026-05-02T00:08:31"
+            },
+            "dates": {
+                "commande": "2026-05-02T00:08:31",
+                "planification": null
+            }
+        },
+        {
+            "id": "CMD005",
+            "id_client": "U1AC74B",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "p04",
+                    "nom": "Chawanmushi au Caviar",
+                    "quantite": 1,
+                    "prix_unitaire": 56
+                },
+                {
+                    "type": "plat",
+                    "id": "p11",
+                    "nom": "Uni d'Hokkaido",
+                    "quantite": 6,
+                    "prix_unitaire": 58
+                }
+            ],
+            "prix_total": 404,
+            "paiement": {
+                "statut": "partiel",
+                "methode": "tickets_fidelite",
+                "date_transaction": "2026-05-02T16:17:50"
+            },
+            "dates": {
+                "commande": "2026-05-02T16:17:50",
+                "planification": null
+            }
+        },
+        {
+            "id": "CMD006",
+            "id_client": "U1AC74B",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "p06",
+                    "nom": "Soupe Miso Dashi Blanc",
+                    "quantite": 1,
+                    "prix_unitaire": 16
+                },
+                {
+                    "type": "plat",
+                    "id": "p08",
+                    "nom": "Hamachi & Yuzu",
+                    "quantite": 2,
+                    "prix_unitaire": 42
+                }
+            ],
+            "prix_total": 100,
+            "paiement": {
+                "statut": "partiel",
+                "methode": "cybank",
+                "date_transaction": "2026-05-02T16:21:58"
+            },
+            "dates": {
+                "commande": "2026-05-02T16:21:58",
+                "planification": null
+            }
+        },
+        {
+            "id": "CMD007",
+            "id_client": "U1AC74B",
+            "type": "sur_place",
+            "statut": "en_attente",
+            "adresse_livraison": "",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "p05",
+                    "nom": "Tempura de Langoustine",
+                    "quantite": 1,
+                    "prix_unitaire": 38
+                },
+                {
+                    "type": "plat",
+                    "id": "p15",
+                    "nom": "Canard Magret au Sansho",
+                    "quantite": 2,
+                    "prix_unitaire": 78
+                }
+            ],
+            "prix_total": 194,
+            "paiement": {
+                "statut": "paye",
+                "methode": "cybank",
+                "date_transaction": "2026-05-02T17:24:15"
+            },
+            "dates": {
+                "commande": "2026-05-02T17:24:15",
+                "planification": "2026-05-04T20:00:00"
             }
         }
     ]

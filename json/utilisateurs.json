@@ -323,7 +323,8 @@
             "dates": {
                 "inscription": "2026-04-24",
                 "derniere_connexion": "2026-04-24"
-            }
+            },
+            "tickets_reduction": []
         }
     ]
 }

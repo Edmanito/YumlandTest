@@ -134,27 +134,27 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json()) // On dit qu'on attend du JSON en retour
             .then(data => {
                 if (data.success) {
-                    // SUCCÈS ! 
-                    btnSubmit.style.background = '#4caf50'; // Bouton en vert
-                    btnSubmit.style.color = 'white';
-                    btnSubmit.textContent = 'PROFIL MIS À JOUR ✓';
+                    btnSaveCmd.style.background = '#4caf50';
+                    btnSaveCmd.style.color = 'white';
+                    btnSaveCmd.textContent = 'COMMANDE MODIFIÉE ✓';
+                    
+                    // On recalcule de manière hyper sécurisée (au cas où il manque une donnée)
+                    let nouveauTotalFinal = 0;
+                    articlesFinaux.forEach(a => {
+                        nouveauTotalFinal += a.quantite * parseFloat(a.prix_unitaire || a.prix || 0);
+                    });
+                    const diff = nouveauTotalFinal - oldTotal;
 
-                    // On ferme la modale après 1.5 seconde
                     setTimeout(() => {
-                        document.getElementById('edit-profile-modal').classList.remove('active');
                         
-                        // Reset du bouton pour la prochaine fois
-                        btnSubmit.style.background = '#bc9c64';
-                        btnSubmit.style.color = 'black';
-                        btnSubmit.textContent = 'ENREGISTRER';
-                        btnSubmit.style.opacity = '1';
-                        btnSubmit.style.pointerEvents = 'auto';
-
-                        // On recharge la page silencieusement pour afficher les nouvelles infos 
-                        // (ou tu pourrais juste changer le texte avec JS si tu as mis des IDs)
-                        window.location.reload(); 
-                    }, 1500);
-
+                        alert("DIAGNOSTIC - Ancien : " + oldTotal + "€ | Nouveau : " + nouveauTotalFinal + "€ | Différence : " + diff + "€");
+                        
+                        if (diff > 0) {
+                            window.location.href = `paiement.php?cmd=${currentCmdId}&montant=${diff}`;
+                        } else {
+                            location.reload(); 
+                        }
+                    }, 500);
                 } else {
                     // ERREUR CÔTÉ SERVEUR (ex: email déjà pris)
                     alert('Erreur : ' + data.message);
@@ -172,4 +172,178 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // =========================================================
+    // 3. GESTION DE LA MODIFICATION DE COMMANDE (AJOUT PHASE 3)
+    // =========================================================
+    const modalCmd = document.getElementById('edit-cmd-modal');
+    const closeCmdBtn = document.getElementById('close-cmd-modal');
+    const btnsModifierCmd = document.querySelectorAll('.btn-modifier-cmd');
+    const btnSaveCmd = document.getElementById('btn-save-cmd');
+    
+    let currentCmdId = null;
+    let oldTotal = 0;
+    let currentArticles = [];
+
+    // Ouvrir la modale
+    if (btnsModifierCmd.length > 0) {
+        btnsModifierCmd.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentCmdId = btn.getAttribute('data-id');
+                oldTotal = parseFloat(btn.getAttribute('data-prix'));
+                currentArticles = JSON.parse(btn.getAttribute('data-articles'));
+                
+                document.getElementById('modal-cmd-id').textContent = currentCmdId;
+                document.getElementById('modal-old-price').textContent = oldTotal;
+                
+                renderModalItems();
+                
+                if (modalCmd) modalCmd.classList.add('active');
+            });
+        });
+    }
+
+    // Fermer la modale
+    if (closeCmdBtn) {
+        closeCmdBtn.addEventListener('click', () => {
+            modalCmd.classList.remove('active');
+        });
+    }
+
+    // Fonction pour dessiner les articles dans la modale
+    function renderModalItems() {
+        const container = document.getElementById('modal-cmd-items');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        let newTotal = 0;
+
+        currentArticles.forEach((art, index) => {
+            // On ignore les articles dont la quantité est tombée à 0
+            if (art.quantite <= 0) return; 
+
+            newTotal += art.quantite * art.prix_unitaire;
+
+            const div = document.createElement('div');
+            div.style.display = 'flex';
+            div.style.justifyContent = 'space-between';
+            div.style.alignItems = 'center';
+            div.style.padding = '8px 0';
+            
+            div.innerHTML = `
+                <div style="flex:1;">
+                    <span style="color:#e8e2d9;">${art.nom}</span><br>
+                    <span style="color:#888; font-size:0.8rem;">${art.prix_unitaire}€ / u</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" class="btn-qty-minus" data-index="${index}" style="background:#333; color:white; border:none; width:25px; height:25px; cursor:pointer;">-</button>
+                    <span style="color:#bc9c64; font-weight:bold; width:20px; text-align:center;">${art.quantite}</span>
+                    <button type="button" class="btn-qty-plus" data-index="${index}" style="background:#333; color:white; border:none; width:25px; height:25px; cursor:pointer;">+</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        document.getElementById('modal-new-price').textContent = newTotal;
+        gererAffichageDifference(newTotal);
+
+        // Attacher les événements +/-
+        document.querySelectorAll('.btn-qty-minus').forEach(b => b.addEventListener('click', (e) => updateQty(e, -1)));
+        document.querySelectorAll('.btn-qty-plus').forEach(b => b.addEventListener('click', (e) => updateQty(e, 1)));
+    }
+
+    // Mettre à jour les quantités
+    function updateQty(e, delta) {
+        const index = e.target.getAttribute('data-index');
+        currentArticles[index].quantite += delta;
+        
+        // On empêche la quantité d'être négative
+        if (currentArticles[index].quantite < 0) {
+            currentArticles[index].quantite = 0; 
+        }
+        renderModalItems();
+    }
+
+    // Afficher dynamiquement si on rembourse (ticket) ou si on fait payer la différence
+    function gererAffichageDifference(newTotal) {
+        const msgDiv = document.getElementById('modal-diff-msg');
+        if (!msgDiv) return;
+
+        const diff = newTotal - oldTotal;
+
+        if (diff > 0) {
+            msgDiv.style.display = 'block';
+            msgDiv.style.background = 'rgba(245, 158, 11, 0.1)';
+            msgDiv.style.color = '#f59e0b';
+            msgDiv.innerHTML = `⚠️ <b>Supplément de ${diff}€</b>. Vous devrez régler cette différence pour que la cuisine démarre.`;
+        } else if (diff < 0) {
+            msgDiv.style.display = 'block';
+            msgDiv.style.background = 'rgba(34, 197, 94, 0.1)';
+            msgDiv.style.color = '#22c55e';
+            msgDiv.innerHTML = `🎁 <b>Économie de ${Math.abs(diff)}€</b>. Un ticket de réduction de ce montant sera ajouté à votre profil.`;
+        } else {
+            msgDiv.style.display = 'none';
+        }
+    }
+
+    // Envoi asynchrone au serveur pour sauvegarder la commande modifiée
+    if (btnSaveCmd) {
+        btnSaveCmd.addEventListener('click', async () => {
+            btnSaveCmd.textContent = "TRAITEMENT...";
+            btnSaveCmd.style.opacity = '0.7';
+            btnSaveCmd.style.pointerEvents = 'none';
+            
+            // On filtre pour ne garder que les articles avec quantité > 0
+            const articlesFinaux = currentArticles.filter(a => a.quantite > 0);
+
+            try {
+                const response = await fetch('../actions/edit_cmd.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_commande: currentCmdId,
+                        articles: articlesFinaux
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    btnSaveCmd.style.background = '#4caf50';
+                    btnSaveCmd.style.color = 'white';
+                    btnSaveCmd.textContent = 'COMMANDE MODIFIÉE ✓';
+                    
+                    // On recalcule la différence pour savoir s'il faut rediriger vers la banque
+                    let nouveauTotalFinal = 0;
+                    articlesFinaux.forEach(a => nouveauTotalFinal += a.quantite * a.prix_unitaire);
+                    const diff = nouveauTotalFinal - oldTotal;
+
+                    setTimeout(() => {
+                        if (diff > 0) {
+                            // ⚠️ Il y a un supplément : on redirige vers le paiement de la différence
+                            window.location.href = `paiement.php?cmd=${currentCmdId}&montant=${diff}`;
+                        } else {
+                            // 🎁 C'est une réduction ou le même prix : on recharge juste le profil
+                            location.reload(); 
+                        }
+                    }, 1500);
+                } else {
+                    alert("Erreur : " + data.message);
+                    resetSaveBtn();
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erreur de connexion avec le serveur.");
+                resetSaveBtn();
+            }
+        });
+    }
+
+    function resetSaveBtn() {
+        btnSaveCmd.textContent = "VALIDER LES MODIFICATIONS";
+        btnSaveCmd.style.opacity = '1';
+        btnSaveCmd.style.pointerEvents = 'auto';
+        btnSaveCmd.style.background = '#bc9c64';
+        btnSaveCmd.style.color = 'black';
+    }
 });

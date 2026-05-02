@@ -132,7 +132,7 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                     </div>
                     <div class="info-group">
                         <label>ADRESSE DE LIVRAISON</label>
-                        <p><?= htmlspecialchars($user['infos']['adresse'] ?? 'Non renseignée') ?></p>
+                        <p><?= !empty($user['infos']['adresse']) ? htmlspecialchars($user['infos']['adresse']) : '<i style="color:#888;">Non renseignée</i>' ?></p>
                         <?php if (isset($user['infos']['etage']) || isset($user['infos']['interphone'])): ?>
                             <p class="sub-info">
                                 <?= !empty($user['infos']['etage']) ? 'Étage ' . htmlspecialchars($user['infos']['etage']) : '' ?>
@@ -140,12 +140,26 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                             </p>
                         <?php endif; ?>
                     </div>
+                    
                     <?php if (($user['remise'] ?? 0) > 0): ?>
                     <div class="info-group">
                         <label>REMISE FIDÉLITÉ</label>
                         <p class="remise"><?= $user['remise'] ?>% sur toutes vos commandes</p>
                     </div>
                     <?php endif; ?>
+
+                    <?php if (!empty($user['tickets_reduction'])): ?>
+                    <div class="info-group">
+                        <label>TICKETS DE RÉDUCTION DISPONIBLES</label>
+                        <?php foreach ($user['tickets_reduction'] as $ticket): ?>
+                            <p style="color: #bc9c64; font-weight: bold; margin-bottom: 5px;">
+                                🎟️ <?= $ticket['montant'] ?>€ 
+                                <span style="font-size: 0.7rem; color: #888; font-weight: normal;">(<?= htmlspecialchars($ticket['origine']) ?>)</span>
+                            </p>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+
                 </div>
             </section>
 
@@ -176,8 +190,20 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                                 </td>
                                 <td class="price">
                                     <?= $cmd['prix_total'] ?>€
+                                    
                                     <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'livree' && empty($cmd['note_client'])): ?>
                                         <a href="notation.php?cmd=<?= $cmd['id'] ?>" class="btn-note" title="Noter">★</a>
+                                    <?php endif; ?>
+
+                                    <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'en_attente'): ?>
+                                        <button class="btn-modifier-cmd" 
+                                                data-id="<?= $cmd['id'] ?>" 
+                                                data-prix="<?= $cmd['prix_total'] ?>" 
+                                                data-articles='<?= json_encode($cmd['articles'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
+                                                title="Modifier ma commande"
+                                                style="background:none; border:1px solid #bc9c64; color:#bc9c64; padding:5px 10px; cursor:pointer; font-size:0.7rem; border-radius:3px; margin-left:10px;">
+                                            ✎ MODIFIER
+                                        </button>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -218,6 +244,27 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
 
                 <button type="submit" class="btn-submit">ENREGISTRER</button>
             </form>
+        </div>
+    </div>
+
+    <div id="edit-cmd-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" id="close-cmd-modal">✕</span>
+            <h2 style="font-family:'Playfair Display'; color:#bc9c64; margin-bottom: 5px;">Modifier ma commande</h2>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">Commande <span id="modal-cmd-id"></span></p>
+            
+            <div id="modal-cmd-items" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 10px 0;">
+                </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                <span style="color:#888; font-size:0.9rem;">Ancien total : <span id="modal-old-price"></span>€</span>
+                <span style="color:#bc9c64; font-size:1.2rem; font-weight:bold;">Nouveau total : <span id="modal-new-price"></span>€</span>
+            </div>
+
+            <div id="modal-diff-msg" style="font-size: 0.85rem; margin-bottom: 15px; padding: 10px; border-radius: 4px; display: none;">
+                </div>
+
+            <button id="btn-save-cmd" class="btn-submit">VALIDER LES MODIFICATIONS</button>
         </div>
     </div>
 
