@@ -7,6 +7,7 @@ requireRole('admin');
 $data = lireJSON(JSON_USERS);
 $utilisateurs = $data['utilisateurs'] ?? [];
 
+// Le PHP garde ces filtres pour le premier chargement (SEO/Accessibilité)
 $filtre = $_GET['role'] ?? 'all';
 if ($filtre !== 'all') {
     $utilisateurs = array_filter($utilisateurs, fn($u) => $u['role'] === $filtre);
@@ -63,17 +64,16 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
         </header>
 
         <section class="controls-section">
-            <form method="GET" class="search-wrapper">
-                <input type="text" name="q" id="searchInput" placeholder="Rechercher un nom, email..." value="<?= htmlspecialchars($recherche) ?>">
-                <select name="role" id="roleFilter" onchange="this.form.submit()">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Rechercher un nom, email..." value="<?= htmlspecialchars($recherche) ?>">
+                <select id="roleFilter">
                     <option value="all"         <?= $filtre === 'all'         ? 'selected' : '' ?>>Tous les rôles</option>
                     <option value="client"      <?= $filtre === 'client'      ? 'selected' : '' ?>>Clients</option>
                     <option value="livreur"     <?= $filtre === 'livreur'     ? 'selected' : '' ?>>Livreurs</option>
                     <option value="admin"       <?= $filtre === 'admin'       ? 'selected' : '' ?>>Admins</option>
-                    <option value="restaurateur"<?= $filtre === 'restaurateur'? 'selected' : '' ?>>Restaurateurs</option>
+                    <option value="restaurateur"><?= $filtre === 'restaurateur'? 'selected' : '' ?>>Restaurateurs</option>
                 </select>
-                <button type="submit" style="padding:14px 20px;background:var(--gold);border:none;color:#000;cursor:pointer;border-radius:10px;font-weight:700;">Rechercher</button>
-            </form>
+            </div>
         </section>
 
         <main class="admin-content">
@@ -95,34 +95,35 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
                         </tr>
                         <?php else: ?>
                         <?php foreach ($utilisateurs as $u): ?>
-                        <tr class="user-row <?= $u['statut'] === 'suspendu' ? 'blocked' : '' ?>" data-role="<?= $u['role'] ?>">
+                        <tr class="user-row <?= $u['statut'] === 'suspendu' ? 'blocked-row' : '' ?>" data-role="<?= $u['role'] ?>">
                             <td>
                                 <div class="user-info">
                                     <div class="avatar <?= $u['role'] === 'livreur' ? 'livreur-av' : '' ?>">
-                                        <?= strtoupper(substr($u['infos']['prenom'], 0, 1) . substr($u['infos']['nom'], 0, 1)) ?>
+                                        <?= strtoupper(substr($u['infos']['prenom'] ?? '?', 0, 1) . substr($u['infos']['nom'] ?? '?', 0, 1)) ?>
                                     </div>
                                     <div>
-                                        <span class="user-name"><?= htmlspecialchars($u['infos']['prenom'] . ' ' . $u['infos']['nom']) ?></span>
-                                        <span class="user-id"><?= htmlspecialchars($u['id']) ?></span>
+                                        <span class="user-name"><?= htmlspecialchars(($u['infos']['prenom'] ?? '') . ' ' . ($u['infos']['nom'] ?? '')) ?></span>
+                                        <span class="user-id" style="display:none;"><?= htmlspecialchars($u['id']) ?></span>
                                     </div>
                                 </div>
                             </td>
                             <td class="hide-mobile email-cell"><?= htmlspecialchars($u['login']) ?></td>
                             <td><span class="badge <?= $u['role'] ?>"><?= ucfirst($u['role']) ?></span></td>
-                            <td class="hide-mobile">
+                            <td class="hide-mobile status-cell">
                                 <?php if ($u['statut'] === 'actif'): ?>
                                     <span class="status-tag active"><span class="dot"></span> Actif</span>
-                                <?php elseif ($u['statut'] === 'suspendu'): ?>
-                                    <span class="status-tag suspended"><span class="dot" style="background:#ff4d4d"></span> Suspendu</span>
                                 <?php else: ?>
-                                    <span class="status-tag"><span class="dot"></span> <?= htmlspecialchars($u['statut']) ?></span>
+                                    <span class="status-tag suspended"><span class="dot" style="background:#ff4d4d"></span> Suspendu</span>
                                 <?php endif; ?>
                             </td>
                             <td class="actions-cell">
                                 <div class="btn-group">
                                     <a href="profil.php?id=<?= $u['id'] ?>" class="btn-icon view" title="Voir Profil">👁</a>
                                     
-                                    <a href="../actions/bloquer.php?id=<?= $u['id'] ?>" class="btn-icon block-toggle" title="<?= $u['statut'] === 'suspendu' ? 'Débloquer' : 'Bloquer' ?>">
+                                    <a href="../actions/bloquer.php?id=<?= $u['id'] ?>" 
+                                        class="btn-icon btn-toggle-status" 
+                                        title="<?= $u['statut'] === 'suspendu' ? 'Débloquer' : 'Bloquer' ?>"
+                                        style="text-decoration: none; font-size: 1.2rem;">
                                         <?= $u['statut'] === 'suspendu' ? '✅' : '🚫' ?>
                                     </a>
                                 </div>
@@ -136,7 +137,7 @@ $nbSuspendus = count(array_filter($dataAll, fn($u) => $u['statut'] === 'suspendu
         </main>
 
         <p style="text-align:right;margin-top:20px;color:#555;font-size:0.75rem;">
-            <?= count($utilisateurs) ?> utilisateur(s) affiché(s)
+            <span id="user-count"><?= count($utilisateurs) ?></span> utilisateur(s) affiché(s)
         </p>
     </div>
 

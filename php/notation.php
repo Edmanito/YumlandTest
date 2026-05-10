@@ -21,7 +21,7 @@ if (!$commande) {
     exit;
 }
 
-if ($commande['note_client'] !== null) {
+if (isset($commande['note_client']) && $commande['note_client'] !== null) {
     header('Location: profil.php?erreur=deja_note');
     exit;
 }

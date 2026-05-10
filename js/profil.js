@@ -346,4 +346,64 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSaveCmd.style.background = '#bc9c64';
         btnSaveCmd.style.color = 'black';
     }
+
+    // =========================================================
+    // 4. GESTION DE LA VISUALISATION DE L'AVIS (L'OEIL)
+    // =========================================================
+    const modalAvis = document.getElementById('modal-view-avis');
+    const contentAvis = document.getElementById('content-avis-popup');
+    const btnCloseAvis = document.getElementById('close-avis-modal');
+    const btnCloseAvisPop = document.getElementById('btn-close-avis-popup');
+
+    const btnsViewAvis = document.querySelectorAll('.btn-view-avis');
+    if (btnsViewAvis.length > 0) {
+        btnsViewAvis.forEach(btn => {
+            btn.addEventListener('click', () => {
+                try {
+                    // Récupération sécurisée des données JSON
+                    const data = JSON.parse(btn.getAttribute('data-avis'));
+                    
+                    if (contentAvis) {
+                        contentAvis.innerHTML = `
+                            <div style="margin-bottom:20px;">
+                                <p style="color:#bc9c64; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">Notes attribuées</p>
+                                <p style="font-size:1.1rem; margin:10px 0;">Cuisine : <span style="color:#bc9c64;">${"★".repeat(data.produits)}${"☆".repeat(5-data.produits)}</span></p>
+                                <p style="font-size:1.1rem; margin:10px 0;">Service : <span style="color:#bc9c64;">${"★".repeat(data.livraison)}${"☆".repeat(5-data.livraison)}</span></p>
+                            </div>
+                            <div style="border-top: 1px solid #333; padding-top:20px;">
+                                <p style="color:#bc9c64; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">Commentaire</p>
+                                <p style="font-style:italic; font-size:0.95rem; line-height:1.6; margin-top:10px; color:#ddd;">
+                                    "${data.commentaire || 'Aucun commentaire laissé.'}"
+                                </p>
+                            </div>
+                            <p style="font-size:0.65rem; color:#666; margin-top:25px;">Évalué le ${data.date_note ? data.date_note : 'Date inconnue'}</p>
+                        `;
+                    }
+                    
+                    if (modalAvis) {
+                        modalAvis.classList.add('active'); // Transition CSS
+                        modalAvis.style.display = 'flex';  // Fallback si la classe n'a pas display: flex
+                    }
+                } catch (e) {
+                    console.error("Erreur de format JSON sur l'avis:", e);
+                    alert("Impossible d'afficher l'avis. Le format est incorrect.");
+                }
+            });
+        });
+    }
+
+    // Fermeture de la modale d'avis avec effet CSS
+    const fermerAvis = () => {
+        if (modalAvis) {
+            modalAvis.classList.remove('active');
+            // On laisse le temps à l'animation CSS opacity: 0 de se faire avant de cacher la div
+            setTimeout(() => {
+                modalAvis.style.display = 'none';
+            }, 300);
+        }
+    };
+    
+    if (btnCloseAvis) btnCloseAvis.addEventListener('click', fermerAvis);
+    if (btnCloseAvisPop) btnCloseAvisPop.addEventListener('click', fermerAvis);
+
 });

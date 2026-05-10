@@ -1,5 +1,5 @@
 /* =========================================
-   KAISEKI SHUNEI — CARTE.JS (Version Finale Phase 3)
+   KAISEKI SHUNEI — CARTE.JS 
    ========================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -247,3 +247,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// =========================================
+    // 6. GESTION DE L'AJOUT AU PANIER (AJAX)
+    // =========================================
+    document.body.addEventListener('click', async (e) => {
+        // On intercepte les clics sur tous les boutons d'ajout (Plats, Boissons, Menus)
+        if (e.target.matches('.btn-ajouter, .drink-btn, .btn-menu')) {
+            e.preventDefault(); // On bloque le rechargement brutal de la page
+            
+            const btn = e.target;
+            const url = btn.getAttribute('href'); // On récupère "ajouter_panier.php?id=..."
+            const texteOriginal = btn.textContent;
+
+            // Effet visuel pendant le chargement
+            btn.textContent = 'AJOUT...';
+            btn.style.pointerEvents = 'none';
+            btn.style.opacity = '0.7';
+
+            try {
+                // On discute avec le serveur en arrière-plan
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Animation "Succès" sur le bouton
+                    btn.textContent = 'AJOUTÉ ✓';
+                    btn.style.background = '#4caf50'; // Vert succès
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = '#4caf50';
+                    btn.style.opacity = '1';
+
+                    // --- Mise à jour de la pastille rouge dans le menu du haut ---
+                    let cartBtn = document.querySelector('.btn-cart');
+                    let cartBadge = cartBtn.querySelector('.cart-count');
+                    
+                    if (!cartBadge) {
+                        // Si le panier était vide, on crée la bulle
+                        cartBtn.innerHTML = `MON PANIER <span class="cart-count">${data.total_items}</span>`;
+                    } else {
+                        // Sinon, on met juste à jour le chiffre
+                        cartBadge.textContent = data.total_items;
+                    }
+                    
+                    // Petit effet d'animation (Pop) sur la pastille
+                    const newBadge = document.querySelector('.cart-count');
+                    if (newBadge) {
+                        newBadge.style.transform = 'scale(1.4)';
+                        newBadge.style.transition = 'transform 0.2s';
+                        setTimeout(() => newBadge.style.transform = 'scale(1)', 200);
+                    }
+
+                    // On remet le bouton normal après 1.5 secondes
+                    setTimeout(() => {
+                        btn.textContent = texteOriginal;
+                        btn.style.background = '';
+                        btn.style.color = '';
+                        btn.style.borderColor = '';
+                        btn.style.pointerEvents = 'auto';
+                    }, 1500);
+
+                } else {
+                    alert("Erreur lors de l'ajout.");
+                    btn.textContent = texteOriginal;
+                    btn.style.pointerEvents = 'auto';
+                    btn.style.opacity = '1';
+                }
+            } catch (error) {
+                console.error("Erreur AJAX Panier:", error);
+                alert("Erreur de communication avec le serveur.");
+                btn.textContent = texteOriginal;
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            }
+        }
+    });

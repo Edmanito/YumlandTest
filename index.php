@@ -12,6 +12,11 @@ $erreurs = [
     'compte_suspendu'         => 'Votre compte a été suspendu. Contactez l\'administration.'
 ];
 $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
+
+// --- NOUVEAU : Récupération de l'email via la session ---
+$emailSaisi = $_SESSION['tentative_email'] ?? '';
+unset($_SESSION['tentative_email']); // On efface la mémoire juste après
+// --------------------------------------------------------
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -169,7 +174,7 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
                 <?php endif; ?>
                 <form action="php/connexion.php" method="POST" id="form-connexion" novalidate>
                     <div style="margin-bottom: 10px;">
-                        <input type="email" name="email" placeholder="Email" class="input-auth" required maxlength="50">
+                        <input type="email" name="email" placeholder="Email" class="input-auth" required maxlength="50" value="<?= htmlspecialchars($emailSaisi) ?>">
                         <div class="char-counter" id="counter-login-email" style="font-size: 0.75rem; text-align: right; color: #888; margin-top: 2px;">0 / 50</div>
                     </div>
                     

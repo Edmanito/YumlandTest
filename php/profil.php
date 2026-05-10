@@ -1,4 +1,7 @@
 <?php
+// On force l'UTF-8 pour éviter les problèmes d'accents
+header('Content-Type: text/html; charset=utf-8');
+
 require_once '../includes/config.php';
 require_once '../includes/fonctions.php';
 
@@ -194,8 +197,19 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                                 <td class="price">
                                     <?= $cmd['prix_total'] ?>€
                                     
-                                    <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'livree' && empty($cmd['note_client'])): ?>
-                                        <a href="notation.php?cmd=<?= $cmd['id'] ?>" class="btn-note" title="Noter">★</a>
+                                    <?php if ($cmd['statut'] === 'livree'): ?>
+                                        <?php if (empty($cmd['note_client'])): ?>
+                                            <?php if ($user['id'] === $currentUser['id']): ?>
+                                                <a href="notation.php?cmd=<?= $cmd['id'] ?>" class="btn-note" title="Noter" style="margin-left: 10px; color: #bc9c64; text-decoration: none; font-size: 1.2rem;">★</a>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <button class="btn-view-avis" 
+                                                    data-avis="<?= htmlspecialchars(json_encode($cmd['note_client'], JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>"
+                                                    style="background:none; border:none; cursor:pointer; font-size:1.2rem; margin-left: 10px; vertical-align: middle;" 
+                                                    title="Voir mon avis">
+                                                👁️
+                                            </button>
+                                        <?php endif; ?>
                                     <?php endif; ?>
 
                                     <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'en_attente'): ?>
@@ -271,6 +285,15 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
         </div>
     </div>
 
+    <div id="modal-view-avis" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:10000;">
+        <div class="modal-content" style="background:#111; border:1px solid #bc9c64; padding:30px; border-radius:5px; width:90%; max-width:400px; position:relative; color:white; text-align:center;">
+            <span class="close-modal" id="close-avis-modal" style="position:absolute; top:10px; right:15px; cursor:pointer; color:#bc9c64; font-size:1.5rem;">✕</span>
+            <h2 style="font-family:'Playfair Display'; color:#bc9c64; margin-bottom: 20px;">VOTRE AVIS</h2>
+            <div id="content-avis-popup">
+                </div>
+            <button id="btn-close-avis-popup" style="width:100%; padding:12px; background:#bc9c64; border:none; margin-top:20px; cursor:pointer; font-weight:bold; color: black;">FERMER</button>
+        </div>
+    </div>
     <script src="../js/profil.js"></script>
 
 </body>
