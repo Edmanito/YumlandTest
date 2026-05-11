@@ -127,7 +127,7 @@ $categories = [
                         <span class="price"><?= $m['prix_total'] ?>€</span>
                     </div>
                     <p><?= htmlspecialchars($m['description']) ?></p>
-                    <a href="ajouter_panier.php?id=<?= $m['id'] ?>" class="btn-menu">RÉSERVER CE MENU</a>
+                    <a href="../actions/ajouter_panier.php?id=<?= $m['id'] ?>" class="btn-menu">RÉSERVER CE MENU</a>
                 </article>
                 <?php endforeach; ?>
             </div>
@@ -167,7 +167,7 @@ $categories = [
                     <div class="drink-desc"><?= htmlspecialchars($p['description']) ?></div>
                     <div class="drink-footer">
                         <span class="drink-price"><?= $p['prix'] ?>€</span>
-                        <a href="ajouter_panier.php?id=<?= $p['id'] ?>" class="drink-btn">COMMANDER</a>
+                        <a href="../actions/ajouter_panier.php?id=<?= $p['id'] ?>" class="drink-btn">COMMANDER</a>
                     </div>
                 </article>
                 <?php endforeach; ?>
@@ -211,8 +211,8 @@ $categories = [
                             <?php endforeach; ?>
                         </div>
                         <?php endif; ?>
-
-                        <a href="ajouter_panier.php?id=<?= $p['id'] ?>" class="btn-ajouter">AJOUTER AU PANIER</a>
+                        
+                        <a href="../actions/ajouter_panier.php?id=<?= $p['id'] ?>" class="btn-ajouter">AJOUTER AU PANIER</a>
                     </div>
                 </article>
                 <?php endforeach; ?>

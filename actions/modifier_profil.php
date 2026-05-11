@@ -14,6 +14,9 @@ if (!estConnecte()) {
 $email = trim($_POST['login'] ?? '');
 $mdp = trim($_POST['mdp'] ?? '');
 $telephone = trim($_POST['telephone'] ?? '');
+$adresse = trim($_POST['adresse'] ?? '');
+$etage = trim($_POST['etage'] ?? '');
+$interphone = trim($_POST['interphone'] ?? '');
 
 // 2. Vérification côté serveur
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -37,9 +40,12 @@ foreach ($dataUsers['utilisateurs'] as $index => $u) {
 }
 
 if ($userIndex !== null) {
-    // 4. Mise à jour des données
+    // 4. Mise à jour des données (dont les nouvelles adresses)
     $dataUsers['utilisateurs'][$userIndex]['login'] = $email;
     $dataUsers['utilisateurs'][$userIndex]['infos']['telephone'] = $telephone;
+    $dataUsers['utilisateurs'][$userIndex]['infos']['adresse'] = $adresse;
+    $dataUsers['utilisateurs'][$userIndex]['infos']['etage'] = $etage;
+    $dataUsers['utilisateurs'][$userIndex]['infos']['interphone'] = $interphone;
     
     if (!empty($mdp)) {
         // On ne modifie le mot de passe que si le champ n'est pas vide
@@ -55,9 +61,7 @@ if ($userIndex !== null) {
     // 7. On renvoie un succès au JavaScript
     echo json_encode([
         'success' => true, 
-        'message' => 'Profil mis à jour',
-        'nouvel_email' => $email,
-        'nouveau_tel' => $telephone
+        'message' => 'Profil mis à jour'
     ]);
 } else {
     echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour.']);

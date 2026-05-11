@@ -4,7 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. GESTION DE LA MODALE D'ÉDITION
+    // =========================================================
+    // 1. GESTION DE LA MODALE D'ÉDITION (PROFIL)
+    // =========================================================
     const btnEdit = document.getElementById('btn-edit-profile');
     const modal = document.getElementById('edit-profile-modal');
     const btnClose = document.getElementById('close-edit-modal');
@@ -12,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnEdit && modal && btnClose) {
         btnEdit.addEventListener('click', () => {
             modal.classList.add('active');
-            // Initialiser les compteurs à l'ouverture
             if (emailInput) updateCounter(emailInput, counterEmail);
             if (mdpInput) updateCounter(mdpInput, counterMdp);
         });
@@ -21,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.remove('active');
         });
 
-        // Fermer la modale si on clique en dehors
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('active');
@@ -29,149 +29,129 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. GESTION DU FORMULAIRE ET DES COMPTEURS
+    // =========================================================
+    // 2. GESTION DU FORMULAIRE ET DES COMPTEURS (PROFIL)
+    // =========================================================
     const formEdit = document.getElementById('form-edit-profile');
-    if (!formEdit) return;
+    
+    // Variables déclarées globalement pour ce bloc
+    let emailInput, mdpInput, telInput, btnSubmit, counterEmail, counterMdp;
 
-    const emailInput = formEdit.querySelector('input[name="login"]');
-    const mdpInput = formEdit.querySelector('input[name="mdp"]');
-    const telInput = formEdit.querySelector('input[name="telephone"]');
-    const btnSubmit = formEdit.querySelector('.btn-submit');
+    if (formEdit) {
+        emailInput = formEdit.querySelector('input[name="login"]');
+        mdpInput = formEdit.querySelector('input[name="mdp"]');
+        telInput = formEdit.querySelector('input[name="telephone"]');
+        btnSubmit = formEdit.querySelector('.btn-submit');
 
-    // -- Afficher/Masquer Mot de passe --
-    const togglePassword = document.getElementById('toggleEditPassword');
-    if (togglePassword && mdpInput) {
-        togglePassword.addEventListener('click', () => {
-            const type = mdpInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            mdpInput.setAttribute('type', type);
-            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
-        });
-    }
-
-    // -- Compteurs de caractères --
-    const counterEmail = document.getElementById('counter-edit-email');
-    const counterMdp = document.getElementById('counter-edit-mdp');
-
-    function updateCounter(inputElement, counterElement) {
-        if (!inputElement || !counterElement) return;
-        const currentLength = inputElement.value.length;
-        const maxLength = inputElement.getAttribute('maxlength');
-        counterElement.textContent = `${currentLength} / ${maxLength}`;
-        
-        if (currentLength >= maxLength) {
-            counterElement.style.color = '#ff4444';
-        } else {
-            counterElement.style.color = '#888';
+        const togglePassword = document.getElementById('toggleEditPassword');
+        if (togglePassword && mdpInput) {
+            togglePassword.addEventListener('click', () => {
+                const type = mdpInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                mdpInput.setAttribute('type', type);
+                togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+            });
         }
-    }
 
-    if (emailInput) emailInput.addEventListener('input', () => updateCounter(emailInput, counterEmail));
-    if (mdpInput) mdpInput.addEventListener('input', () => updateCounter(mdpInput, counterMdp));
+        counterEmail = document.getElementById('counter-edit-email');
+        counterMdp = document.getElementById('counter-edit-mdp');
 
-    // -- Formatage du téléphone --
-    if (telInput) {
-        telInput.addEventListener('input', () => {
-            let val = telInput.value.replace(/\D/g, '').substring(0, 10);
-            if (val.length > 0) {
-                val = val.match(/.{1,2}/g).join(' ');
+        function updateCounter(inputElement, counterElement) {
+            if (!inputElement || !counterElement) return;
+            const currentLength = inputElement.value.length;
+            const maxLength = inputElement.getAttribute('maxlength');
+            counterElement.textContent = `${currentLength} / ${maxLength}`;
+            
+            if (currentLength >= maxLength) {
+                counterElement.style.color = '#ff4444';
+            } else {
+                counterElement.style.color = '#888';
             }
-            telInput.value = val;
-        });
-    }
-
-    // -- Validation avant soumission (Blocage de l'envoi) --
-    formEdit.addEventListener('submit', (e) => {
-        let isValid = true;
-        
-        emailInput.style.outline = 'none';
-        telInput.style.outline = 'none';
-        mdpInput.style.outline = 'none';
-
-        // Validation Email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailInput.value)) {
-            isValid = false;
-            emailInput.style.outline = '1px solid #ff4444';
         }
 
-        // Validation Téléphone
-        const phoneRegex = /^(\+33|0)[1-9](\s?\d{2}){4}$/;
-        if (!phoneRegex.test(telInput.value.replace(/\s/g, ''))) {
-            isValid = false;
-            telInput.style.outline = '1px solid #ff4444';
+        if (emailInput) emailInput.addEventListener('input', () => updateCounter(emailInput, counterEmail));
+        if (mdpInput) mdpInput.addEventListener('input', () => updateCounter(mdpInput, counterMdp));
+
+        if (telInput) {
+            telInput.addEventListener('input', () => {
+                let val = telInput.value.replace(/\D/g, '').substring(0, 10);
+                if (val.length > 0) {
+                    val = val.match(/.{1,2}/g).join(' ');
+                }
+                telInput.value = val;
+            });
         }
 
-        // Validation Mot de passe (seulement s'il est rempli, car il est optionnel pour la modif)
-        if (mdpInput.value.length > 0 && mdpInput.value.length < 8) {
-            isValid = false;
-            mdpInput.style.outline = '1px solid #ff4444';
-        }
-
-        if (!isValid) {
-            // ON BLOQUE L'ENVOI AU SERVEUR SI INVALIDE !
-            e.preventDefault();
-            btnSubmit.style.animation = 'shake 0.4s';
-            setTimeout(() => btnSubmit.style.animation = '', 400);
-        } else {
-            // TOUT EST VALIDE : ON ENVOIE EN AJAX (FETCH)
+        // ENVOI DU FORMULAIRE PROFIL
+        formEdit.addEventListener('submit', (e) => {
+            let isValid = true;
             
-            // 1. On empêche le rechargement classique de la page (TRÈS IMPORTANT)
-            e.preventDefault(); 
-            
-            // 2. On prépare les données du formulaire
-            const formData = new FormData(formEdit);
-            
-            // Effet visuel de chargement
-            btnSubmit.textContent = 'ENREGISTREMENT...';
-            btnSubmit.style.opacity = '0.7';
-            btnSubmit.style.pointerEvents = 'none'; // Empêche le double clic
+            emailInput.style.outline = 'none';
+            telInput.style.outline = 'none';
+            mdpInput.style.outline = 'none';
 
-            // 3. On envoie la requête HTTP en arrière-plan
-            fetch('../actions/modifier_profil.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json()) // On dit qu'on attend du JSON en retour
-            .then(data => {
-                if (data.success) {
-                    btnSaveCmd.style.background = '#4caf50';
-                    btnSaveCmd.style.color = 'white';
-                    btnSaveCmd.textContent = 'COMMANDE MODIFIÉE ✓';
-                    
-                    // On recalcule de manière hyper sécurisée (au cas où il manque une donnée)
-                    let nouveauTotalFinal = 0;
-                    articlesFinaux.forEach(a => {
-                        nouveauTotalFinal += a.quantite * parseFloat(a.prix_unitaire || a.prix || 0);
-                    });
-                    const diff = nouveauTotalFinal - oldTotal;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                isValid = false;
+                emailInput.style.outline = '1px solid #ff4444';
+            }
 
-                    setTimeout(() => {
+            const phoneRegex = /^(\+33|0)[1-9](\s?\d{2}){4}$/;
+            if (!phoneRegex.test(telInput.value.replace(/\s/g, ''))) {
+                isValid = false;
+                telInput.style.outline = '1px solid #ff4444';
+            }
+
+            if (mdpInput.value.length > 0 && mdpInput.value.length < 8) {
+                isValid = false;
+                mdpInput.style.outline = '1px solid #ff4444';
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                btnSubmit.style.animation = 'shake 0.4s';
+                setTimeout(() => btnSubmit.style.animation = '', 400);
+            } else {
+                e.preventDefault(); 
+                
+                // FormData va capturer automatiquement Adresse, Étage et Interphone !
+                const formData = new FormData(formEdit);
+                
+                btnSubmit.textContent = 'ENREGISTREMENT...';
+                btnSubmit.style.opacity = '0.7';
+                btnSubmit.style.pointerEvents = 'none';
+
+                fetch('../actions/modifier_profil.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // LE BUG EST CORRIGÉ ICI : On valide juste le profil et on recharge la page
+                        btnSubmit.style.background = '#4caf50';
+                        btnSubmit.style.color = 'white';
+                        btnSubmit.textContent = 'PROFIL MIS À JOUR ✓';
                         
-                        alert("DIAGNOSTIC - Ancien : " + oldTotal + "€ | Nouveau : " + nouveauTotalFinal + "€ | Différence : " + diff + "€");
-                        
-                        if (diff > 0) {
-                            window.location.href = `paiement.php?cmd=${currentCmdId}&montant=${diff}`;
-                        } else {
+                        setTimeout(() => {
                             location.reload(); 
-                        }
-                    }, 500);
-                } else {
-                    // ERREUR CÔTÉ SERVEUR (ex: email déjà pris)
-                    alert('Erreur : ' + data.message);
+                        }, 800);
+                    } else {
+                        alert('Erreur : ' + data.message);
+                        btnSubmit.textContent = 'ENREGISTRER';
+                        btnSubmit.style.opacity = '1';
+                        btnSubmit.style.pointerEvents = 'auto';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur Fetch:', error);
+                    alert('Une erreur est survenue lors de la communication avec le serveur.');
                     btnSubmit.textContent = 'ENREGISTRER';
                     btnSubmit.style.opacity = '1';
                     btnSubmit.style.pointerEvents = 'auto';
-                }
-            })
-            .catch(error => {
-                console.error('Erreur Fetch:', error);
-                alert('Une erreur est survenue lors de la communication avec le serveur.');
-                btnSubmit.textContent = 'ENREGISTRER';
-                btnSubmit.style.opacity = '1';
-                btnSubmit.style.pointerEvents = 'auto';
-            });
-        }
-    });
+                });
+            }
+        });
+    }
 
     // =========================================================
     // 3. GESTION DE LA MODIFICATION DE COMMANDE (AJOUT PHASE 3)
@@ -185,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let oldTotal = 0;
     let currentArticles = [];
 
-    // Ouvrir la modale
     if (btnsModifierCmd.length > 0) {
         btnsModifierCmd.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -203,14 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fermer la modale
     if (closeCmdBtn) {
         closeCmdBtn.addEventListener('click', () => {
             modalCmd.classList.remove('active');
         });
     }
 
-    // Fonction pour dessiner les articles dans la modale
     function renderModalItems() {
         const container = document.getElementById('modal-cmd-items');
         if (!container) return;
@@ -219,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let newTotal = 0;
 
         currentArticles.forEach((art, index) => {
-            // On ignore les articles dont la quantité est tombée à 0
             if (art.quantite <= 0) return; 
 
             newTotal += art.quantite * art.prix_unitaire;
@@ -247,24 +223,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-new-price').textContent = newTotal;
         gererAffichageDifference(newTotal);
 
-        // Attacher les événements +/-
         document.querySelectorAll('.btn-qty-minus').forEach(b => b.addEventListener('click', (e) => updateQty(e, -1)));
         document.querySelectorAll('.btn-qty-plus').forEach(b => b.addEventListener('click', (e) => updateQty(e, 1)));
     }
 
-    // Mettre à jour les quantités
     function updateQty(e, delta) {
         const index = e.target.getAttribute('data-index');
         currentArticles[index].quantite += delta;
         
-        // On empêche la quantité d'être négative
         if (currentArticles[index].quantite < 0) {
             currentArticles[index].quantite = 0; 
         }
         renderModalItems();
     }
 
-    // Afficher dynamiquement si on rembourse (ticket) ou si on fait payer la différence
     function gererAffichageDifference(newTotal) {
         const msgDiv = document.getElementById('modal-diff-msg');
         if (!msgDiv) return;
@@ -286,14 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Envoi asynchrone au serveur pour sauvegarder la commande modifiée
     if (btnSaveCmd) {
         btnSaveCmd.addEventListener('click', async () => {
             btnSaveCmd.textContent = "TRAITEMENT...";
             btnSaveCmd.style.opacity = '0.7';
             btnSaveCmd.style.pointerEvents = 'none';
             
-            // On filtre pour ne garder que les articles avec quantité > 0
             const articlesFinaux = currentArticles.filter(a => a.quantite > 0);
 
             try {
@@ -313,17 +283,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     btnSaveCmd.style.color = 'white';
                     btnSaveCmd.textContent = 'COMMANDE MODIFIÉE ✓';
                     
-                    // On recalcule la différence pour savoir s'il faut rediriger vers la banque
                     let nouveauTotalFinal = 0;
                     articlesFinaux.forEach(a => nouveauTotalFinal += a.quantite * a.prix_unitaire);
                     const diff = nouveauTotalFinal - oldTotal;
 
                     setTimeout(() => {
                         if (diff > 0) {
-                            // ⚠️ Il y a un supplément : on redirige vers le paiement de la différence
                             window.location.href = `paiement.php?cmd=${currentCmdId}&montant=${diff}`;
                         } else {
-                            // 🎁 C'est une réduction ou le même prix : on recharge juste le profil
                             location.reload(); 
                         }
                     }, 1500);
@@ -360,7 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnsViewAvis.forEach(btn => {
             btn.addEventListener('click', () => {
                 try {
-                    // Récupération sécurisée des données JSON
                     const data = JSON.parse(btn.getAttribute('data-avis'));
                     
                     if (contentAvis) {
@@ -381,8 +347,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     
                     if (modalAvis) {
-                        modalAvis.classList.add('active'); // Transition CSS
-                        modalAvis.style.display = 'flex';  // Fallback si la classe n'a pas display: flex
+                        modalAvis.classList.add('active'); 
+                        modalAvis.style.display = 'flex';  
                     }
                 } catch (e) {
                     console.error("Erreur de format JSON sur l'avis:", e);
@@ -392,11 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fermeture de la modale d'avis avec effet CSS
     const fermerAvis = () => {
         if (modalAvis) {
             modalAvis.classList.remove('active');
-            // On laisse le temps à l'animation CSS opacity: 0 de se faire avant de cacher la div
             setTimeout(() => {
                 modalAvis.style.display = 'none';
             }, 300);

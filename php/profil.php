@@ -139,10 +139,11 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                     <div class="info-group">
                         <label>ADRESSE DE LIVRAISON</label>
                         <p><?= !empty($user['infos']['adresse']) ? htmlspecialchars($user['infos']['adresse']) : '<i style="color:#888;">Non renseignée</i>' ?></p>
-                        <?php if (isset($user['infos']['etage']) || isset($user['infos']['interphone'])): ?>
-                            <p class="sub-info">
-                                <?= !empty($user['infos']['etage']) ? 'Étage ' . htmlspecialchars($user['infos']['etage']) : '' ?>
-                                <?= !empty($user['infos']['interphone']) ? ' • Code : ' . htmlspecialchars($user['infos']['interphone']) : '' ?>
+                        <?php if (!empty($user['infos']['etage']) || !empty($user['infos']['interphone'])): ?>
+                            <p class="sub-info" style="font-size: 0.85rem; color: #aaa; margin-top: 5px;">
+                                <?= !empty($user['infos']['etage']) ? 'Étage/Appt : ' . htmlspecialchars($user['infos']['etage']) : '' ?>
+                                <?= !empty($user['infos']['etage']) && !empty($user['infos']['interphone']) ? ' • ' : '' ?>
+                                <?= !empty($user['infos']['interphone']) ? 'Interphone : ' . htmlspecialchars($user['infos']['interphone']) : '' ?>
                             </p>
                         <?php endif; ?>
                     </div>
@@ -234,7 +235,7 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
     </div>
 
     <div id="edit-profile-modal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" id="close-edit-modal">✕</span>
             <h2 style="font-family:'Playfair Display'; color:#bc9c64; margin-bottom: 20px;">Modifier mon profil</h2>
             
@@ -257,6 +258,22 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                 <div class="input-group">
                     <label>Téléphone</label>
                     <input type="tel" name="telephone" value="<?= htmlspecialchars($user['infos']['telephone'] ?? '') ?>" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Adresse de livraison</label>
+                    <input type="text" name="adresse" value="<?= htmlspecialchars($user['infos']['adresse'] ?? '') ?>" placeholder="N°, Rue, Ville...">
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Étage / Appt</label>
+                        <input type="text" name="etage" value="<?= htmlspecialchars($user['infos']['etage'] ?? '') ?>" placeholder="Ex: 3ème gauche">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Interphone / Code</label>
+                        <input type="text" name="interphone" value="<?= htmlspecialchars($user['infos']['interphone'] ?? '') ?>" placeholder="Ex: A123B">
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-submit">ENREGISTRER</button>
@@ -289,8 +306,7 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
         <div class="modal-content" style="background:#111; border:1px solid #bc9c64; padding:30px; border-radius:5px; width:90%; max-width:400px; position:relative; color:white; text-align:center;">
             <span class="close-modal" id="close-avis-modal" style="position:absolute; top:10px; right:15px; cursor:pointer; color:#bc9c64; font-size:1.5rem;">✕</span>
             <h2 style="font-family:'Playfair Display'; color:#bc9c64; margin-bottom: 20px;">VOTRE AVIS</h2>
-            <div id="content-avis-popup">
-                </div>
+            <div id="content-avis-popup"></div>
             <button id="btn-close-avis-popup" style="width:100%; padding:12px; background:#bc9c64; border:none; margin-top:20px; cursor:pointer; font-weight:bold; color: black;">FERMER</button>
         </div>
     </div>
