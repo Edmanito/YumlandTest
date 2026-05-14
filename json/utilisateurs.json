@@ -312,7 +312,7 @@
                 "nom": "Figarland",
                 "prenom": "Shanks",
                 "telephone": "07 65 45 45 39",
-                "adresse": "",
+                "adresse": "43 rue des louis",
                 "etage": "",
                 "interphone": ""
             },
@@ -324,7 +324,12 @@
                 "inscription": "2026-04-24",
                 "derniere_connexion": "2026-04-24"
             },
-            "tickets_reduction": []
+            "tickets_reduction": [
+                {
+                    "montant": 16,
+                    "origine": "Remboursement CMD CMD014"
+                }
+            ]
         }
     ]
 }

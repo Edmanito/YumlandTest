@@ -156,6 +156,27 @@ unset($_SESSION['tentative_email']); // On efface la mémoire juste après
     <section class="hero-section">
         <div class="hero-bg-image"></div>
         <div class="hero-content">
+            
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'livreur'): ?>
+                <div style="margin-bottom: 30px; width: 100%; max-width: 400px;">
+                    <a href="php/livraison.php" style="
+                        display: block;
+                        background-color: #bc9c64;
+                        color: #111;
+                        padding: 20px;
+                        font-size: 1.3rem;
+                        font-weight: bold;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 15px rgba(188, 156, 100, 0.5);
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        border: 2px solid #fff;
+                    ">
+                        🚚 RETOUR À MA TOURNÉE
+                    </a>
+                </div>
+            <?php endif; ?>
             <h2 class="fade-in">L'Art de la Perfection</h2>
             <div class="search-box">
                 <input type="text" placeholder="Rechercher une saveur..." class="input-search">

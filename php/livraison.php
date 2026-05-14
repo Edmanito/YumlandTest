@@ -6,9 +6,11 @@ requireRole('livreur');
 $livreur = $_SESSION['user'];
 
 $dataCommandes = lireJSON(JSON_COMMANDES);
+
+// CORRECTION ICI : On utilise ?? null pour éviter le plantage si id_livreur n'existe pas encore
 $mesLivraisons = array_values(array_filter(
     $dataCommandes['commandes'] ?? [],
-    fn($c) => $c['id_livreur'] === $livreur['id'] && $c['statut'] === 'en_livraison'
+    fn($c) => ($c['id_livreur'] ?? null) === $livreur['id'] && ($c['statut'] ?? '') === 'en_livraison'
 ));
 ?>
 <!DOCTYPE html>
@@ -27,7 +29,7 @@ $mesLivraisons = array_values(array_filter(
             <span class="pulse"></span>
             <h1>MISSION EN COURS</h1>
         </div>
-        <a href="../actions/logout.php" class="btn-exit">QUITTER</a>
+        <a href="../index.php" class="btn-exit">ACCUEIL</a>
     </header>
 
     <main class="delivery-container">

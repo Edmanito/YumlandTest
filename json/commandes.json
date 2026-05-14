@@ -293,7 +293,7 @@
             "id": "CMD009",
             "id_client": "U1AC74B",
             "type": "livraison",
-            "statut": "en_attente",
+            "statut": "pret",
             "adresse_livraison": "",
             "articles": [
                 {
