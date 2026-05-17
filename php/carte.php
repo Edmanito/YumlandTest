@@ -26,6 +26,19 @@ $categories = [
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script>
+        // Appliquer le thème AVANT le rendu pour éviter le flash
+        (function(){
+            const m = document.cookie.match(/(?:^|; )kaiseki_theme=([^;]*)/);
+         const t = m ? decodeURIComponent(m[1]) : 'sombre';
+            if (t === 'clair') {
+             const l = document.createElement('link');
+             l.rel = 'stylesheet'; l.id = 'theme-stylesheet';
+             l.href = '../css/theme-clair.css';
+                document.head.appendChild(l);
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Carte | Kaiseki Shunei</title>
@@ -236,5 +249,6 @@ $categories = [
     </div>
 
     <script src="../js/carte.js"></script>
+    <script src="../js/theme.js"></script>
 </body>
 </html>

@@ -164,6 +164,19 @@ if ($control_recu === $control_calcule || $bank_status === "SUCCESS_TICKETS") {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script>
+        // Appliquer le thème AVANT le rendu pour éviter le flash
+        (function(){
+            const m = document.cookie.match(/(?:^|; )kaiseki_theme=([^;]*)/);
+         const t = m ? decodeURIComponent(m[1]) : 'sombre';
+            if (t === 'clair') {
+             const l = document.createElement('link');
+             l.rel = 'stylesheet'; l.id = 'theme-stylesheet';
+             l.href = '../css/theme-clair.css';
+                document.head.appendChild(l);
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <title>Kaiseki Shunei — Résultat du paiement</title>
     <style>
@@ -235,6 +248,7 @@ if ($control_recu === $control_calcule || $bank_status === "SUCCESS_TICKETS") {
     <?php endif; ?>
 
 </div>
+<script src="../js/theme.js"></script>
 </body>
 </html>
 <?php

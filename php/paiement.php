@@ -89,6 +89,19 @@ $control = md5($chaine);
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+        // Appliquer le thème AVANT le rendu pour éviter le flash
+        (function(){
+            const m = document.cookie.match(/(?:^|; )kaiseki_theme=([^;]*)/);
+         const t = m ? decodeURIComponent(m[1]) : 'sombre';
+            if (t === 'clair') {
+             const l = document.createElement('link');
+             l.rel = 'stylesheet'; l.id = 'theme-stylesheet';
+             l.href = '../css/theme-clair.css';
+                document.head.appendChild(l);
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <title>Paiement CYBank | Kaiseki Shunei</title>
 </head>
@@ -107,6 +120,6 @@ $control = md5($chaine);
         <input type="hidden" name="retour"      value="<?= $url_retour ?>">
         <input type="hidden" name="control"     value="<?= $control ?>">
     </form>
-
+<script src="../js/theme.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
             "id": "CMD001",
             "id_client": "U403263",
             "type": "livraison",
-            "statut": "en_livraison",
+            "statut": "livree",
             "adresse_livraison": "",
             "articles": [
                 {
@@ -25,7 +25,8 @@
                 "commande": "2026-04-05T23:40:08",
                 "planification": null,
                 "preparation": "2026-04-05T21:40:28",
-                "expedition": "2026-04-05T21:40:33"
+                "expedition": "2026-04-05T21:40:33",
+                "livraison": "2026-05-17T12:33:32"
             },
             "id_livreur": "L002"
         },
@@ -554,6 +555,39 @@
             },
             "dates": {
                 "commande": "2026-05-10T18:38:19",
+                "planification": null
+            }
+        },
+        {
+            "id": "CMD015",
+            "id_client": "U001",
+            "type": "livraison",
+            "statut": "en_attente",
+            "adresse_livraison": "12 Rue du Sushi, 75001 Paris",
+            "articles": [
+                {
+                    "type": "plat",
+                    "id": "p23",
+                    "nom": "Tarte Sakura & Fraise",
+                    "quantite": 1,
+                    "prix_unitaire": 26
+                },
+                {
+                    "type": "plat",
+                    "id": "p21",
+                    "nom": "Tiramisu au Sésame Noir",
+                    "quantite": 1,
+                    "prix_unitaire": 24
+                }
+            ],
+            "prix_total": 50,
+            "paiement": {
+                "statut": "paye",
+                "methode": "cybank",
+                "date_transaction": "2026-05-17T14:06:47"
+            },
+            "dates": {
+                "commande": "2026-05-17T14:06:47",
                 "planification": null
             }
         }

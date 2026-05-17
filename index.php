@@ -21,6 +21,19 @@ unset($_SESSION['tentative_email']); // On efface la mémoire juste après
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script>
+        // Appliquer le thème AVANT le rendu pour éviter le flash
+        (function(){
+            const m = document.cookie.match(/(?:^|; )kaiseki_theme=([^;]*)/);
+         const t = m ? decodeURIComponent(m[1]) : 'sombre';
+            if (t === 'clair') {
+             const l = document.createElement('link');
+             l.rel = 'stylesheet'; l.id = 'theme-stylesheet';
+             l.href = 'css/theme-clair.css';
+                document.head.appendChild(l);
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaiseki Shunei | Accueil</title>
@@ -53,6 +66,19 @@ unset($_SESSION['tentative_email']); // On efface la mémoire juste après
     <div id="side-menu" class="side-panel">
         <div class="menu-content-wrapper">
             <div class="menu-links">
+                <button id="btn-theme-toggle" onclick="toggleTheme()" style="
+                    background: none;
+                    border: 1px solid rgba(197,160,89,0.4);
+                    color: var(--gold);
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 0.75rem;
+                    letter-spacing: 3px;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    width: 100%;
+                    text-align: left;
+                ">☀️ MODE CLAIR</button>
                 <?php if (estConnecte()): ?>
                     <a href="php/carte.php">RÉSERVER</a>
                 <?php else: ?>
@@ -431,5 +457,6 @@ unset($_SESSION['tentative_email']); // On efface la mémoire juste après
             if (saved !== 'FR' && typeof applyLang === 'function') applyLang(saved);
         })();
     </script>
+    <script src="js/theme.js"></script>
 </body>
 </html>
