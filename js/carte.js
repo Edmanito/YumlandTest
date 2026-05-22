@@ -148,6 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         const grid = document.getElementById('grid-resultats');
+        
+        // --- OPTIMISATION : On stocke tout le HTML dans une variable ---
+        let htmlComplet = '';
 
         currentPlats.forEach(p => {
             const src = p.image ? `../${p.image}` : '';
@@ -186,8 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </article>
             `;
-            grid.innerHTML += card;
+            
+            htmlComplet += card;
         });
+
+        // On injecte le tout en une seule fois dans le DOM !
+        grid.innerHTML = htmlComplet;
 
         attacherEvenementsCartes();
     }
@@ -203,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- AJOUT PANIER AJAX ---
+    // --- AJOUT PANIER AJAX (AVEC L'EFFET VERT RÉTABLI !) ---
     document.body.addEventListener('click', async (e) => {
         const btn = e.target.closest('.btn-ajouter, .drink-btn, .btn-menu');
         if (btn) {
