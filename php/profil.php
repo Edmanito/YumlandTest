@@ -208,34 +208,36 @@ $pct = min(100, round(($user['fidelite']['points'] / 1000) * 100));
                                         <?= $labelStatuts[$cmd['statut']] ?? $cmd['statut'] ?>
                                     </span>
                                 </td>
-                                <td class="price">
-                                    <?= $cmd['prix_total'] ?>€
-                                    
-                                    <?php if ($cmd['statut'] === 'livree'): ?>
-                                        <?php if (empty($cmd['note_client'])): ?>
-                                            <?php if ($user['id'] === $currentUser['id']): ?>
-                                                <a href="notation.php?cmd=<?= $cmd['id'] ?>" class="btn-note" title="Noter" style="margin-left: 10px; color: #bc9c64; text-decoration: none; font-size: 1.2rem;">★</a>
+                                <td>
+                                    <div class="price" style="display:flex; align-items:center; gap:10px; min-height: 28px;">
+                                        <span style="min-width: 45px;"><?= $cmd['prix_total'] ?>€</span>
+                                        
+                                        <?php if ($cmd['statut'] === 'livree'): ?>
+                                            <?php if (empty($cmd['note_client'])): ?>
+                                                <?php if ($user['id'] === $currentUser['id']): ?>
+                                                    <a href="notation.php?cmd=<?= $cmd['id'] ?>" class="btn-note" title="Noter" style="color: #bc9c64; text-decoration: none; font-size: 1.2rem; line-height: 1;">★</a>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <button class="btn-view-avis" 
+                                                        data-avis="<?= htmlspecialchars(json_encode($cmd['note_client'], JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>"
+                                                        style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding: 0; line-height: 1;" 
+                                                        title="Voir mon avis">
+                                                    👁️
+                                                </button>
                                             <?php endif; ?>
-                                        <?php else: ?>
-                                            <button class="btn-view-avis" 
-                                                    data-avis="<?= htmlspecialchars(json_encode($cmd['note_client'], JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>"
-                                                    style="background:none; border:none; cursor:pointer; font-size:1.2rem; margin-left: 10px; vertical-align: middle;" 
-                                                    title="Voir mon avis">
-                                                👁️
+                                        <?php endif; ?>
+
+                                        <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'en_attente'): ?>
+                                            <button class="btn-modifier-cmd" 
+                                                    data-id="<?= $cmd['id'] ?>" 
+                                                    data-prix="<?= $cmd['prix_total'] ?>" 
+                                                    data-articles='<?= json_encode($cmd['articles'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
+                                                    title="Modifier ma commande"
+                                                    style="background:none; border:1px solid #bc9c64; color:#bc9c64; padding:4px 8px; cursor:pointer; font-size:0.7rem; border-radius:3px;">
+                                                ✎ MODIFIER
                                             </button>
                                         <?php endif; ?>
-                                    <?php endif; ?>
-
-                                    <?php if ($user['id'] === $currentUser['id'] && $cmd['statut'] === 'en_attente'): ?>
-                                        <button class="btn-modifier-cmd" 
-                                                data-id="<?= $cmd['id'] ?>" 
-                                                data-prix="<?= $cmd['prix_total'] ?>" 
-                                                data-articles='<?= json_encode($cmd['articles'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'
-                                                title="Modifier ma commande"
-                                                style="background:none; border:1px solid #bc9c64; color:#bc9c64; padding:5px 10px; cursor:pointer; font-size:0.7rem; border-radius:3px; margin-left:10px;">
-                                            ✎ MODIFIER
-                                        </button>
-                                    <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

@@ -15,12 +15,22 @@ $prenom     = nettoyer($_POST['prenom']     ?? '');
 $nom        = nettoyer($_POST['nom']        ?? '');
 $login      = nettoyer($_POST['login']      ?? '');
 $telephone  = nettoyer($_POST['telephone']  ?? '');
-$adresse    = nettoyer($_POST['adresse']    ?? '');
 $etage      = nettoyer($_POST['etage']      ?? '');
 $interphone = nettoyer($_POST['interphone'] ?? '');
 $mdp        = $_POST['mdp'] ?? '';
 
-if (empty($prenom) || empty($nom) || empty($login) || empty($mdp)) {
+// --- CORRECTION : Récupération et assemblage des morceaux de l'adresse ---
+$adresse_rue   = nettoyer($_POST['adresse_rue']   ?? '');
+$adresse_cp    = nettoyer($_POST['adresse_cp']    ?? '');
+$adresse_ville = nettoyer($_POST['adresse_ville'] ?? '');
+
+$adresse = '';
+if (!empty($adresse_rue) && !empty($adresse_cp) && !empty($adresse_ville)) {
+    $adresse = $adresse_rue . ', ' . $adresse_cp . ' ' . $adresse_ville;
+}
+// -------------------------------------------------------------------------
+
+if (empty($prenom) || empty($nom) || empty($login) || empty($mdp) || empty($adresse)) {
     header('Location: ../php/inscription.php?erreur=champs_vides');
     exit;
 }

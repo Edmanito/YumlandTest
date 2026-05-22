@@ -3,7 +3,6 @@
 // KAISEKI SHUNEI — FONCTIONS.PHP
 // =========================================
 
-
 function lireJSON($fichier) {
     if (!file_exists($fichier)) return [];
     $contenu = file_get_contents($fichier);
@@ -12,14 +11,12 @@ function lireJSON($fichier) {
     return $data ?? [];
 }
 
-
 function ecrireJSON($fichier, $data) {
     return file_put_contents(
         $fichier,
         json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
     );
 }
-
 
 function sauvegarderJSON($fichier, $data) {
     return ecrireJSON($fichier, $data);
@@ -59,11 +56,42 @@ function ajouterUtilisateur($nouvelUser) {
     return ecrireJSON(JSON_USERS, $data);
 }
 
-
 function estConnecte() {
+    // L'astuce performance : on ne lit le JSON qu'une seule fois par page
+    static $verificationFaite = false;
+
+    if (!isset($_SESSION['user'])) {
+        return false;
+    }
+
+    if (!$verificationFaite) {
+        $verificationFaite = true;
+        $data = lireJSON(JSON_USERS);
+        
+        if (!empty($data['utilisateurs'])) {
+            foreach ($data['utilisateurs'] as $u) {
+                if ($u['id'] === $_SESSION['user']['id']) {
+                    
+                    // --- LE VIDEUR DE SÉCURITÉ ---
+                    if ($u['statut'] === 'suspendu') {
+                        unset($_SESSION['user']);
+                        if (session_status() === PHP_SESSION_ACTIVE) {
+                            session_destroy();
+                        }
+                        return false; // Il est éjecté instantanément
+                    }
+                    
+                    // --- SYNCHRONISATION EN TEMPS RÉEL ---
+                    // On met à jour la session avec les dernières données du JSON
+                    $_SESSION['user'] = $u;
+                    break;
+                }
+            }
+        }
+    }
+
     return isset($_SESSION['user']);
 }
-
 
 function aLeRole($role) {
     if (!estConnecte()) return false;
@@ -75,11 +103,12 @@ function requireConnexion() {
     if (!estConnecte()) {
         $profondeur = substr_count($_SERVER['PHP_SELF'], '/');
         $redirect = $profondeur > 2 ? '../index.php' : 'index.php';
-        header('Location: ' . $redirect);
+        // Redirection avec un message spécifique si le compte a été suspendu
+        $erreur = isset($_SESSION['user']) ? '' : '?erreur=compte_suspendu';
+        header('Location: ' . $redirect . $erreur);
         exit;
     }
 }
-
 
 function requireRole($role) {
     if (!estConnecte() || !aLeRole($role)) {

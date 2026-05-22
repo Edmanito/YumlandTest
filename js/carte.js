@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- AJOUT PANIER AJAX (AVEC L'EFFET VERT RÉTABLI !) ---
+    // --- AJOUT PANIER AJAX  ---
     document.body.addEventListener('click', async (e) => {
         const btn = e.target.closest('.btn-ajouter, .drink-btn, .btn-menu');
         if (btn) {

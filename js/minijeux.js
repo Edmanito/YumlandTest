@@ -108,6 +108,29 @@ function jEndGame(won) {
     jRunning = false; jStopTimer(); clearInterval(jInterval);
     document.getElementById('j-game-area').innerHTML = '';
 
+    // On récupère le bouton d'encaissement s'il existe, sinon on le crée
+    let btnCashOut = document.getElementById('j-btn-cashout');
+    if (!btnCashOut) {
+        btnCashOut = document.createElement('button');
+        btnCashOut.id = 'j-btn-cashout';
+        btnCashOut.className = 'j-btn gold';
+        btnCashOut.style.display = 'none';
+        btnCashOut.textContent = "M'arrêter là et encaisser";
+        
+        // On l'ajoute dans le conteneur des boutons de l'écran de résultat
+        const btnContainer = document.querySelector('#j-result div[style*="justify-content:center"]');
+        if (btnContainer) btnContainer.appendChild(btnCashOut);
+        
+        // L'action du bouton d'encaissement :
+        btnCashOut.addEventListener('click', () => {
+            document.getElementById('j-final').querySelector('h2').textContent = 'Sage décision !';
+            document.getElementById('j-final').querySelector('p').textContent = `Tu t'arrêtes avec ${jTotal}% de réduction.`;
+            document.querySelector('.j-coupon-code').textContent = 'KAISEKI' + jTotal;
+            document.querySelector('.j-coupon div:last-child').textContent = `-${jTotal}% sur ta commande`;
+            jShow('j-final');
+        });
+    }
+
     if (won) {
         jTotal += 4; jDone.push(jStage);
         const isLast = jStage >= STAGES.length - 1;
@@ -115,25 +138,43 @@ function jEndGame(won) {
         document.getElementById('j-res-title').textContent = 'Bravo ! +4% gagné !';
         document.getElementById('j-res-desc').textContent  = isLast
             ? 'Tu as tout réussi ! Applique ta réduction.'
-            : 'Continue — attention, un raté et tout disparaît !';
+            : 'Continue ou encaisse tes gains — attention, un raté et tout disparaît !';
         document.getElementById('j-res-pct').textContent   = jTotal + '%';
         document.getElementById('j-res-pct').style.color   = '#22c55e';
-        document.getElementById('j-btn-retry').textContent = 'Abandonner';
-        document.getElementById('j-btn-next').style.display = isLast ? 'none' : '';
+        
+        document.getElementById('j-btn-retry').textContent = 'Abandonner (Tout perdre)';
+        document.getElementById('j-btn-retry').style.background = 'transparent';
+        document.getElementById('j-btn-retry').style.color = '#ef4444';
+        
+        document.getElementById('j-btn-next').style.display = isLast ? 'none' : 'block';
+        btnCashOut.style.display = isLast ? 'none' : 'block';
+        btnCashOut.textContent = `M'arrêter là et encaisser ${jTotal}%`;
+        
         jShow('j-result');
-        if (isLast) setTimeout(() => jShow('j-final'), 1200);
+        if (isLast) {
+            document.getElementById('j-final').querySelector('h2').textContent = 'Félicitations !';
+            document.getElementById('j-final').querySelector('p').textContent = 'Tu as tout réussi ! Voici ton code promo.';
+            document.querySelector('.j-coupon-code').textContent = 'KAISEKI20';
+            document.querySelector('.j-coupon div:last-child').textContent = '-20% sur ta commande';
+            setTimeout(() => jShow('j-final'), 1200);
+        }
     } else {
         const perdu = jTotal;
         jTotal = 0; jDone = []; jStage = 0;
         document.getElementById('j-res-emoji').textContent = '💸';
         document.getElementById('j-res-title').textContent = 'Raté ! Tout est perdu !';
         document.getElementById('j-res-desc').textContent  = perdu > 0
-            ? 'Tu avais ' + perdu + '% ... tout s\'envole. Recommence depuis le début !'
+            ? 'Tu avais ' + perdu + '% ... tout s\'envole. Quel dommage !'
             : 'Dommage ! Recommence depuis le début.';
         document.getElementById('j-res-pct').textContent   = '0%';
         document.getElementById('j-res-pct').style.color   = '#ef4444';
+        
         document.getElementById('j-btn-retry').textContent = 'Tout recommencer';
+        document.getElementById('j-btn-retry').style.background = '';
+        document.getElementById('j-btn-retry').style.color = '';
+        
         document.getElementById('j-btn-next').style.display = 'none';
+        btnCashOut.style.display = 'none';
         jShow('j-result');
     }
     jRefreshHome();
