@@ -17,6 +17,39 @@ $erreur = isset($_GET['erreur']) ? ($erreurs[$_GET['erreur']] ?? '') : '';
 $emailSaisi = $_SESSION['tentative_email'] ?? '';
 unset($_SESSION['tentative_email']); // On efface la mémoire juste après
 // --------------------------------------------------------
+
+// --- NOUVEAU : Récupération des 3 derniers avis clients ---
+$dataCmdsIndex = lireJSON(JSON_COMMANDES);
+$dataUsersIndex = lireJSON(JSON_USERS);
+$avisClients = [];
+
+if (isset($dataCmdsIndex['commandes'])) {
+    foreach ($dataCmdsIndex['commandes'] as $c) {
+        // On ne garde que les commandes notées AVEC un commentaire texte
+        if (!empty($c['note_client']) && !empty($c['note_client']['commentaire'])) {
+            $prenomClient = "Un gastronome";
+            if (isset($dataUsersIndex['utilisateurs'])) {
+                foreach ($dataUsersIndex['utilisateurs'] as $u) {
+                    if ($u['id'] === $c['id_client']) {
+                        // On affiche "Prénom N." pour l'anonymat
+                        $prenomClient = htmlspecialchars($u['infos']['prenom'] . ' ' . substr($u['infos']['nom'] ?? '', 0, 1) . '.');
+                        break;
+                    }
+                }
+            }
+            $avisClients[] = [
+                'prenom'      => $prenomClient,
+                'note'        => (int)$c['note_client']['produits'],
+                // --- CORRECTION : On décode proprement les entités HTML (apostrophes, accents) ---
+                'commentaire' => htmlspecialchars(html_entity_decode($c['note_client']['commentaire'], ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'),
+                'date'        => htmlspecialchars($c['note_client']['date_note'])
+            ];
+        }
+    }
+}
+// On inverse pour avoir les plus récents en premier, et on en garde 3 maximum
+$avisClients = array_slice(array_reverse($avisClients), 0, 3);
+// --------------------------------------------------------
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -343,6 +376,29 @@ unset($_SESSION['tentative_email']); // On efface la mémoire juste après
         </div>
     </section>
 
+    <?php if (!empty($avisClients)): ?>
+    <section id="avis" class="scroll-section" style="background-color: var(--bg-color); padding: 80px 20px; text-align: center; border-top: 1px solid rgba(188, 156, 100, 0.2);">
+        <span class="section-subtitle">LIVRE D'OR</span>
+        <h2 class="section-title-gold" style="color: #bc9c64; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 40px;">Paroles de Gastronomes</h2>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto;">
+            <?php foreach ($avisClients as $avis): ?>
+                <div style="flex: 1; min-width: 280px; max-width: 350px; background: rgba(255,255,255,0.03); border: 1px solid rgba(188, 156, 100, 0.3); padding: 30px 20px; border-radius: 4px; text-align: left; position: relative;">
+                    <div style="color: #bc9c64; font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 2px;">
+                        <?= str_repeat('★', $avis['note']) ?><span style="color: #444;"><?= str_repeat('★', 5 - $avis['note']) ?></span>
+                    </div>
+                    <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; color: #eee; margin-bottom: 20px; line-height: 1.6;">
+                        "<?= $avis['commentaire'] ?>"
+                    </p>
+                    <div style="border-top: 1px solid rgba(188, 156, 100, 0.2); padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold; color: #bc9c64; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;"><?= $avis['prenom'] ?></span>
+                        <span style="font-size: 0.8rem; color: #888;"><?= $avis['date'] ?></span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
     <section id="menu" class="scroll-section menu-view-minimal">
         <div class="menu-bg-overlay"></div>
         <a href="php/carte.php" class="menu-compact-box">
