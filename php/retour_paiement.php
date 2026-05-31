@@ -5,12 +5,6 @@ require_once '../includes/getapikey.php';
 
 date_default_timezone_set('Europe/Paris');
 
-if (!function_exists('sauvegarderJSON')) {
-    function sauvegarderJSON($chemin, $data) {
-        return file_put_contents($chemin, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    }
-}
-
 $transaction  = $_GET['transaction'] ?? '';
 $montant      = $_GET['montant']     ?? '';
 $vendeur      = $_GET['vendeur']     ?? '';
@@ -30,8 +24,11 @@ $type_retour     = "inconnu"; // 'nouveau' ou 'supplement'
 $type_commande      = 'livraison';
 $date_planification = null;
 
-// On valide la signature CYBank OU notre bypass ticket à 0€
-if ($control_recu === $control_calcule || $bank_status === "SUCCESS_TICKETS") {
+// SÉCURITÉ : Le bypass SUCCESS_TICKETS ne doit fonctionner QUE si le montant est de 0€
+$est_bypass_valide = ($bank_status === "SUCCESS_TICKETS" && (float)$montant === 0.0);
+
+// On valide soit la signature de la banque, soit le bypass légitime à 0€
+if ($control_recu === $control_calcule || $est_bypass_valide) {
 
     if ($statut === "accepted" || $bank_status === "SUCCESS_TICKETS") {
         

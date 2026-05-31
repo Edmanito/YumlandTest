@@ -21,6 +21,14 @@ if (!$input || !isset($input['id_commande']) || !isset($input['articles'])) {
 $id_commande = $input['id_commande'];
 $nouveaux_articles = $input['articles'];
 
+// --- SÉCURITÉ PRIX : Charger les prix réels depuis la source ---
+$dataPlats = lireJSON(JSON_PLATS);
+$dataMenus = lireJSON(JSON_MENUS);
+$prixRefs = [];
+foreach (($dataPlats['plats'] ?? []) as $p) { $prixRefs[$p['id']] = $p['prix']; }
+foreach (($dataMenus['menus'] ?? []) as $m) { $prixRefs[$m['id']] = $m['prix_total']; }
+// -------------------------------------------------------------
+
 // Charger les commandes
 $dataCommandes = lireJSON(JSON_COMMANDES);
 $commandes = &$dataCommandes['commandes'];
@@ -38,7 +46,15 @@ foreach ($commandes as &$cmd) {
         
         // Calculer le nouveau total
         $nouveau_total = 0;
-        foreach ($nouveaux_articles as $art) {
+        foreach ($nouveaux_articles as &$art) {
+            $id_art = $art['id'];
+            // On force le prix réel venant du serveur, pas celui envoyé par le JS
+            if (isset($prixRefs[$id_art])) {
+                $art['prix_unitaire'] = $prixRefs[$id_art];
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Article invalide detecté.']);
+                exit;
+            }
             $nouveau_total += ($art['quantite'] * $art['prix_unitaire']);
         }
 

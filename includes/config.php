@@ -11,6 +11,9 @@ define('JSON_COMMANDES', JSON_DIR . 'commandes.json');
 
 define('SITE_NOM', 'Kaiseki Shunei');
 
+// Clé secrète pour sécuriser les transactions (NE JAMAIS PARTAGER)
+define('SECRET_SALT', 'kAiSeKi_2026_SuPeR_SeCrEt_99!');
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

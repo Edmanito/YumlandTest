@@ -45,6 +45,11 @@ if (strlen($mdp) < 8) {
     exit;
 }
 
+if (!preg_match('/^[0-9]{10}$/', $telephone) && !empty($telephone)) {
+    header('Location: ../php/inscription.php?erreur=tel_invalide');
+    exit;
+}
+
 if (loginExiste($login)) {
     header('Location: ../php/inscription.php?erreur=email_existe');
     exit;

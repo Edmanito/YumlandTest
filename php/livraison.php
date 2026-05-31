@@ -7,11 +7,17 @@ $livreur = $_SESSION['user'];
 
 $dataCommandes = lireJSON(JSON_COMMANDES);
 
-// CORRECTION ICI : On utilise ?? null pour éviter le plantage si id_livreur n'existe pas encore
+// CORRECTION: On utilise ?? null pour éviter le plantage si id_livreur n'existe pas encore
 $mesLivraisons = array_values(array_filter(
     $dataCommandes['commandes'] ?? [],
     fn($c) => ($c['id_livreur'] ?? null) === $livreur['id'] && ($c['statut'] ?? '') === 'en_livraison'
 ));
+
+// Récupération des avis (commandes livrées par ce livreur avec une note de livraison)
+$mesAvis = array_reverse(array_values(array_filter(
+    $dataCommandes['commandes'] ?? [],
+    fn($c) => ($c['id_livreur'] ?? null) === $livreur['id'] && ($c['statut'] ?? '') === 'livree' && isset($c['note_client']['livraison'])
+)));
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -118,6 +124,27 @@ $mesLivraisons = array_values(array_filter(
             </footer>
         </article>
         <?php endforeach; ?>
+
+        <!-- Section des dernières notations -->
+        <section class="delivery-reviews" style="margin-top: 60px; border-top: 1px solid rgba(188, 156, 100, 0.2); padding-top: 40px; padding-bottom: 40px;">
+            <h2 style="font-family: 'Playfair Display', serif; color: #bc9c64; text-align: center; margin-bottom: 30px; letter-spacing: 2px; font-size: 1.5rem;">VOS DERNIERS AVIS</h2>
+            
+            <?php if (empty($mesAvis)): ?>
+                <p style="text-align:center; color:#666; font-size:0.85rem; font-style: italic;">Aucune évaluation reçue pour le moment.</p>
+            <?php else: ?>
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <?php foreach (array_slice($mesAvis, 0, 5) as $avis): ?>
+                        <div class="review-card" style="background: rgba(188,156,100,0.03); border: 1px solid rgba(188,156,100,0.1); padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                <span style="color: #bc9c64; font-weight: 700; font-size: 1.1rem;">⭐ <?= $avis['note_client']['livraison'] ?> / 5</span>
+                                <span style="font-size: 0.75rem; color: #666;"><?= $avis['note_client']['date_note'] ?? 'Date inconnue' ?></span>
+                            </div>
+                            <div style="font-size: 0.7rem; color: #444; margin-top: 15px; text-align: right; letter-spacing: 1px;">COMMANDE #<?= $avis['id'] ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </section>
 
     </main>
 

@@ -14,7 +14,8 @@ function lireJSON($fichier) {
 function ecrireJSON($fichier, $data) {
     return file_put_contents(
         $fichier,
-        json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+        LOCK_EX
     );
 }
 
@@ -120,5 +121,11 @@ function requireRole($role) {
 }
 
 function nettoyer($valeur) {
+    if (is_array($valeur)) {
+        foreach ($valeur as $key => $val) {
+            $valeur[$key] = nettoyer($val);
+        }
+        return $valeur;
+    }
     return htmlspecialchars(trim($valeur), ENT_QUOTES, 'UTF-8');
 }
